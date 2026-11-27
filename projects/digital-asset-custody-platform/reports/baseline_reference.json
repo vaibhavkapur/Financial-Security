@@ -1,0 +1,77 @@
+{
+  "report_version": "1.0.0",
+  "runtime": {
+    "go_version": "go1.27.1",
+    "goos": "darwin",
+    "goarch": "arm64",
+    "num_cpu": 10,
+    "policy_version": "policy-v1.0.0",
+    "policy_digest": "5a78b40524c847b93d7c05322249569be4f8b46ea6fff8dff519bab4fab8e77c",
+    "deterministic_seed": "CUSTODY-REF-SEED-2026-0001",
+    "simulated_base_time": "2026-01-15T10:00:00Z"
+  },
+  "intent_id": "intent-ref-0001",
+  "intent_hash": "77fed00728a365eb0a7554623e56feee1fd5cc6a90fc2e502096f2a505bff7ef",
+  "oracle_intent_hash": "77fed00728a365eb0a7554623e56feee1fd5cc6a90fc2e502096f2a505bff7ef",
+  "oracle_matched": true,
+  "tx_hash": "0x3525f6e8cc16bbe962afadde472d9a36b64b4ee68c3d2eded3a051abb7023903",
+  "key_epoch": 1,
+  "approval_count": 2,
+  "signature_count": 2,
+  "final_status": "CONFIRMED",
+  "confirmations": 2,
+  "vault_confirmed_balance": 8500000000,
+  "vault_reserved_balance": 0,
+  "vault_available_balance": 8500000000,
+  "destination_onchain_balance": 1500000000,
+  "reconciliation": {
+    "generated_at": "2026-01-15T10:00:49Z",
+    "chain_height": 2,
+    "chain_tip_hash": "0x176c8fd4289afaf270532add37065e49a0d96e0ad0586b4988a7dbda0ef31b23",
+    "reconciled": true,
+    "audit_chain_valid": true,
+    "vault_checks": [
+      {
+        "vault_id": "vault-treasury-01",
+        "asset": "MOCK_ETH",
+        "ledger_confirmed_balance": 8500000000,
+        "onchain_confirmed_balance": 8500000000,
+        "ledger_reserved_balance": 0,
+        "sum_pending_reserved_amount": 0,
+        "ledger_available_balance": 8500000000,
+        "balance_delta": 0,
+        "reserved_delta": 0,
+        "matched": true
+      },
+      {
+        "vault_id": "vault-treasury-01",
+        "asset": "MOCK_USDC",
+        "ledger_confirmed_balance": 0,
+        "onchain_confirmed_balance": 0,
+        "ledger_reserved_balance": 0,
+        "sum_pending_reserved_amount": 0,
+        "ledger_available_balance": 0,
+        "balance_delta": 0,
+        "reserved_delta": 0,
+        "matched": true
+      }
+    ],
+    "checksum": "f62bab1dc2b28ebe7c716c349cc29a2400d3707caef3cb2ae192cb6052fd04ed"
+  },
+  "counters": {
+    "intents_submitted": 1,
+    "policy_allowed": 1,
+    "policy_denied": 0,
+    "approvals_accepted": 2,
+    "approvals_rejected": 0,
+    "signatures_issued": 1,
+    "signatures_rejected": 0,
+    "replays_blocked": 0,
+    "signer_outages": 0,
+    "reorgs_detected": 0,
+    "key_rotations": 0,
+    "intents_invalidated_key_rotation": 0,
+    "reconciliations_passed": 1,
+    "reconciliations_failed": 0
+  }
+}

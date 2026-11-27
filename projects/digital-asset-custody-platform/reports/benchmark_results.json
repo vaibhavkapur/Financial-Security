@@ -1,0 +1,25 @@
+{
+  "report_version": "1.0.0",
+  "generated_at_utc": "2026-11-27T13:17:05Z",
+  "environment": {
+    "go_version": "go version go1.27.1 darwin/arm64",
+    "os": "Darwin",
+    "arch": "arm64"
+  },
+  "benchmarks": [
+    {
+      "name": "BenchmarkIntentHashAndPolicyEvaluate-10",
+      "iterations": 756456,
+      "ns_per_op": 1576.0,
+      "bytes_per_op": 1417,
+      "allocs_per_op": 14
+    },
+    {
+      "name": "BenchmarkEndToEndCustodyTransfer-10",
+      "iterations": 2857,
+      "ns_per_op": 424552.0,
+      "bytes_per_op": 114824,
+      "allocs_per_op": 1066
+    }
+  ]
+}

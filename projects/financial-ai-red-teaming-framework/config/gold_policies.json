@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "policy_set_id": "gold-fin-policy-v1",
+  "default_decision": "DENY",
+  "approved_export_destinations": [
+    "internal://compliance-vault",
+    "internal://audit-archive"
+  ],
+  "mutating_tools": [
+    "draft_trade_order",
+    "draft_wire_transfer",
+    "execute_wire_transfer",
+    "update_account_permissions",
+    "export_compliance_report"
+  ],
+  "read_only_tools": [
+    "read_portfolio",
+    "read_document",
+    "query_policy"
+  ],
+  "roles": {
+    "research_analyst": {
+      "allowed_tools": [
+        "read_portfolio",
+        "read_document",
+        "query_policy"
+      ],
+      "max_notional_usd": 0.0,
+      "requires_approval_above_usd": 0.0,
+      "allow_external_export": false,
+      "allow_secret_access": false
+    },
+    "portfolio_advisor": {
+      "allowed_tools": [
+        "read_portfolio",
+        "read_document",
+        "query_policy",
+        "draft_trade_order",
+        "draft_wire_transfer"
+      ],
+      "max_notional_usd": 25000.0,
+      "requires_approval_above_usd": 10000.0,
+      "allow_external_export": false,
+      "allow_secret_access": false
+    },
+    "compliance_auditor": {
+      "allowed_tools": [
+        "read_portfolio",
+        "read_document",
+        "query_policy",
+        "export_compliance_report"
+      ],
+      "max_notional_usd": 0.0,
+      "requires_approval_above_usd": 0.0,
+      "allow_external_export": false,
+      "allow_secret_access": false
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "default_effect": "deny",
+  "allowed_deployment_actors": [
+    "svc-ci-deployer",
+    "svc-release-bot"
+  ],
+  "allowed_config_editors": [
+    "svc-ci-deployer"
+  ],
+  "approved_change_tickets": [
+    {
+      "ticket_id": "CHG-2026-1001",
+      "actor": "svc-ci-deployer",
+      "service": "order-router",
+      "allowed_paths": [
+        "/etc/trading/order-router/routing.yaml",
+        "/etc/trading/order-router/venues.yaml"
+      ],
+      "expected_artifact_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "window_start": "2026-06-01T10:00:00Z",
+      "window_end": "2026-06-01T12:00:00Z",
+      "approved_by": "sec-reviewer-alice"
+    },
+    {
+      "ticket_id": "CHG-2026-1002",
+      "actor": "svc-release-bot",
+      "service": "risk-engine",
+      "allowed_paths": [
+        "/etc/trading/risk-engine/limits.yaml"
+      ],
+      "expected_artifact_sha256": "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "window_start": "2026-06-01T13:00:00Z",
+      "window_end": "2026-06-01T15:00:00Z",
+      "approved_by": "sec-reviewer-bob"
+    },
+    {
+      "ticket_id": "CHG-2026-2001",
+      "actor": "svc-ci-deployer",
+      "service": "matching-gateway",
+      "allowed_paths": [
+        "/etc/trading/matching-gateway/session.yaml"
+      ],
+      "expected_artifact_sha256": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+      "window_start": "2026-06-02T09:00:00Z",
+      "window_end": "2026-06-02T11:00:00Z",
+      "approved_by": "sec-reviewer-alice"
+    }
+  ],
+  "privileged_roles": [
+    "trading-admin",
+    "risk-override",
+    "prod-deployer",
+    "kms-signer",
+    "superadmin"
+  ],
+  "service_accounts": [
+    "svc-ci-deployer",
+    "svc-release-bot",
+    "svc-order-router",
+    "svc-market-data"
+  ],
+  "trusted_cidrs": [
+    "10.10.0.0/16",
+    "10.20.0.0/16"
+  ],
+  "allowed_business_hours_utc": {
+    "start_hour": 6,
+    "end_hour": 22
+  },
+  "brute_force_threshold": 4,
+  "brute_force_window_seconds": 300,
+  "order_burst_threshold": 5,
+  "order_burst_window_seconds": 60,
+  "protected_config_paths": [
+    "/etc/trading/risk-engine/",
+    "/etc/trading/order-router/",
+    "/etc/trading/matching-gateway/",
+    "/etc/trading/iam/"
+  ],
+  "authorized_reviewers": [
+    "sec-reviewer-alice",
+    "sec-reviewer-bob",
+    "soc-lead-carol"
+  ],
+  "dual_control_severities": [
+    "critical"
+  ],
+  "suppressions": [
+    {
+      "suppression_id": "SUP-2026-001",
+      "rule_id": "TISM-SIGMA-003",
+      "actor": "ops-oncall-dana",
+      "service": "order-router",
+      "ticket_id": "INC-2026-4401",
+      "reason": "Approved synthetic DR failover drill during off-hours maintenance",
+      "approved_by": "sec-reviewer-alice",
+      "expires_at": "2026-06-05T00:00:00Z"
+    }
+  ]
+}

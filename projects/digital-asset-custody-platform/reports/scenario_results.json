@@ -1,0 +1,207 @@
+{
+  "report_version": "1.0.0",
+  "runtime": {
+    "go_version": "go1.27.1",
+    "goos": "darwin",
+    "goarch": "arm64",
+    "num_cpu": 10,
+    "policy_version": "policy-v1.0.0",
+    "policy_digest": "5a78b40524c847b93d7c05322249569be4f8b46ea6fff8dff519bab4fab8e77c",
+    "deterministic_seed": "CUSTODY-SCENARIOS-SEED-2026-0001",
+    "simulated_base_time": "2026-01-15T12:00:00Z"
+  },
+  "all_passed": true,
+  "scenarios": [
+    {
+      "scenario_id": "scenario-tampered-destination",
+      "category": "domain_correctness",
+      "passed": true,
+      "observed_error_code": "ERR_INTENT_HASH_MISMATCH",
+      "expected_error_code": "ERR_INTENT_HASH_MISMATCH",
+      "reconciled": true,
+      "audit_chain_valid": true,
+      "summary": "Isolated signer cluster rejected intent whose destination address was altered after approval.",
+      "details": {
+        "approved_destination": "0x2222222222222222222222222222222222222222",
+        "signatures_issued": 0,
+        "tampered_destination": "0x3333333333333333333333333333333333333333"
+      },
+      "counters": {
+        "intents_submitted": 1,
+        "policy_allowed": 1,
+        "policy_denied": 0,
+        "approvals_accepted": 2,
+        "approvals_rejected": 0,
+        "signatures_issued": 0,
+        "signatures_rejected": 1,
+        "replays_blocked": 0,
+        "signer_outages": 0,
+        "reorgs_detected": 0,
+        "key_rotations": 0,
+        "intents_invalidated_key_rotation": 0,
+        "reconciliations_passed": 1,
+        "reconciliations_failed": 0
+      }
+    },
+    {
+      "scenario_id": "scenario-missing-quorum",
+      "category": "domain_correctness",
+      "passed": true,
+      "observed_error_code": "ERR_INSUFFICIENT_APPROVALS",
+      "expected_error_code": "ERR_INSUFFICIENT_APPROVALS",
+      "reconciled": true,
+      "audit_chain_valid": true,
+      "summary": "Both custody engine and isolated signer refused to sign with 1 of 2 required approvals.",
+      "details": {
+        "approvals_needed": 2,
+        "approvals_present": 1,
+        "signatures_issued": 0
+      },
+      "counters": {
+        "intents_submitted": 1,
+        "policy_allowed": 1,
+        "policy_denied": 0,
+        "approvals_accepted": 1,
+        "approvals_rejected": 0,
+        "signatures_issued": 0,
+        "signatures_rejected": 2,
+        "replays_blocked": 0,
+        "signer_outages": 0,
+        "reorgs_detected": 0,
+        "key_rotations": 0,
+        "intents_invalidated_key_rotation": 0,
+        "reconciliations_passed": 1,
+        "reconciliations_failed": 0
+      }
+    },
+    {
+      "scenario_id": "scenario-replay",
+      "category": "integration_resilience",
+      "passed": true,
+      "observed_error_code": "ERR_REPLAY_DETECTED",
+      "expected_error_code": "ERR_REPLAY_DETECTED",
+      "reconciled": true,
+      "audit_chain_valid": true,
+      "summary": "Duplicate intent ID, reused nonce, and signer-side payload replay were all blocked.",
+      "details": {
+        "dup_id_code": "ERR_REPLAY_DETECTED",
+        "replays_blocked": 3,
+        "reused_nonce_code": "ERR_REPLAY_DETECTED",
+        "signer_replay_code": "ERR_REPLAY_DETECTED"
+      },
+      "counters": {
+        "intents_submitted": 3,
+        "policy_allowed": 1,
+        "policy_denied": 0,
+        "approvals_accepted": 2,
+        "approvals_rejected": 0,
+        "signatures_issued": 1,
+        "signatures_rejected": 1,
+        "replays_blocked": 3,
+        "signer_outages": 0,
+        "reorgs_detected": 0,
+        "key_rotations": 0,
+        "intents_invalidated_key_rotation": 0,
+        "reconciliations_passed": 1,
+        "reconciliations_failed": 0
+      }
+    },
+    {
+      "scenario_id": "scenario-signer-outage",
+      "category": "integration_resilience",
+      "passed": true,
+      "observed_error_code": "ERR_SIGNER_QUORUM_UNAVAILABLE",
+      "expected_error_code": "ERR_SIGNER_QUORUM_UNAVAILABLE",
+      "reconciled": true,
+      "audit_chain_valid": true,
+      "summary": "2-of-3 quorum tolerated 1 offline signer, failed closed with 2 offline signers, and recovered cleanly once quorum returned.",
+      "details": {
+        "outage_code": "ERR_SIGNER_QUORUM_UNAVAILABLE",
+        "recovered_tx_hash": "0x6f6d644ffb0a82969ec1c7a6cfee04f376847356b282fa17758e68a6e3844a36",
+        "single_outage_tx_hash": "0x8236802f676226aeb4d457463b35af2e7bb20c4c565d66daa5de2557113a21cc"
+      },
+      "counters": {
+        "intents_submitted": 2,
+        "policy_allowed": 2,
+        "policy_denied": 0,
+        "approvals_accepted": 4,
+        "approvals_rejected": 0,
+        "signatures_issued": 2,
+        "signatures_rejected": 1,
+        "replays_blocked": 0,
+        "signer_outages": 2,
+        "reorgs_detected": 0,
+        "key_rotations": 0,
+        "intents_invalidated_key_rotation": 0,
+        "reconciliations_passed": 1,
+        "reconciliations_failed": 0
+      }
+    },
+    {
+      "scenario_id": "scenario-chain-reorg",
+      "category": "integration_resilience",
+      "passed": true,
+      "reconciled": true,
+      "audit_chain_valid": true,
+      "summary": "Shallow reorg reverted provisional settlement back to reserved, reconciled mid-reorg, and re-confirmed on canonical fork.",
+      "details": {
+        "new_block_hash": "0xec8200562a1759c3cebfb83a12a63a5f8e4a619c48f80e347ad756186ef23638",
+        "orphaned_block_hash": "0x57e3c0263687238c6046a56cafd59c22ad8393912509675637f9ccbb5c90f7d7",
+        "reorg_depth": 1,
+        "status_final": "CONFIRMED",
+        "status_mid_reorg": "BROADCAST"
+      },
+      "counters": {
+        "intents_submitted": 1,
+        "policy_allowed": 1,
+        "policy_denied": 0,
+        "approvals_accepted": 2,
+        "approvals_rejected": 0,
+        "signatures_issued": 1,
+        "signatures_rejected": 0,
+        "replays_blocked": 0,
+        "signer_outages": 0,
+        "reorgs_detected": 1,
+        "key_rotations": 0,
+        "intents_invalidated_key_rotation": 0,
+        "reconciliations_passed": 2,
+        "reconciliations_failed": 0
+      }
+    },
+    {
+      "scenario_id": "scenario-key-rotation-pending-intent",
+      "category": "boundary_failure",
+      "passed": true,
+      "observed_error_code": "ERR_KEY_EPOCH_MISMATCH",
+      "expected_error_code": "ERR_KEY_EPOCH_MISMATCH",
+      "reconciled": true,
+      "audit_chain_valid": true,
+      "summary": "Key rotation to epoch 2 invalidated pending epoch-1 intent, released reserved balance, rejected stale-epoch signing, and settled replacement epoch-2 intent.",
+      "details": {
+        "invalidated_intent_ids": [
+          "intent-rot-pending-01"
+        ],
+        "new_key_epoch": 2,
+        "replacement_status": "CONFIRMED",
+        "replacement_tx_hash": "0x5f431928e8f2a3f8213875f5cac09cd2969054bb977ce79277f91b9a28330727",
+        "reserved_after_rotation": 0
+      },
+      "counters": {
+        "intents_submitted": 2,
+        "policy_allowed": 2,
+        "policy_denied": 0,
+        "approvals_accepted": 4,
+        "approvals_rejected": 0,
+        "signatures_issued": 1,
+        "signatures_rejected": 2,
+        "replays_blocked": 0,
+        "signer_outages": 0,
+        "reorgs_detected": 0,
+        "key_rotations": 1,
+        "intents_invalidated_key_rotation": 1,
+        "reconciliations_passed": 1,
+        "reconciliations_failed": 0
+      }
+    }
+  ]
+}

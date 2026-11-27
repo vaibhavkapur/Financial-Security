@@ -1,0 +1,131 @@
+{
+  "fixture_version": "1.0.0",
+  "cases": [
+    {
+      "name": "mainnet_network_rejected",
+      "expected_error_code": "ERR_UNSUPPORTED_NETWORK",
+      "intent": {
+        "schema_version": "1.0.0",
+        "intent_id": "intent-inv-001",
+        "vault_id": "vault-treasury-01",
+        "network": "ethereum-mainnet",
+        "asset": "MOCK_ETH",
+        "unit": "gwei",
+        "amount": 1000000,
+        "source_address": "0x1111111111111111111111111111111111111111",
+        "destination_address": "0x2222222222222222222222222222222222222222",
+        "nonce": 1,
+        "requested_by": "requester-treasury-bot",
+        "created_at": "2026-01-15T10:00:00Z",
+        "expires_at": "2026-01-15T11:00:00Z",
+        "key_epoch": 1,
+        "memo": "forbidden-mainnet"
+      }
+    },
+    {
+      "name": "destination_not_allowlisted",
+      "expected_error_code": "ERR_DESTINATION_NOT_ALLOWLISTED",
+      "intent": {
+        "schema_version": "1.0.0",
+        "intent_id": "intent-inv-002",
+        "vault_id": "vault-treasury-01",
+        "network": "mock-eth-sepolia",
+        "asset": "MOCK_ETH",
+        "unit": "gwei",
+        "amount": 1000000,
+        "source_address": "0x1111111111111111111111111111111111111111",
+        "destination_address": "0x9999999999999999999999999999999999999999",
+        "nonce": 1,
+        "requested_by": "requester-treasury-bot",
+        "created_at": "2026-01-15T10:00:00Z",
+        "expires_at": "2026-01-15T11:00:00Z",
+        "key_epoch": 1,
+        "memo": "unlisted-destination"
+      }
+    },
+    {
+      "name": "amount_exceeds_single_transfer_limit",
+      "expected_error_code": "ERR_AMOUNT_LIMIT_EXCEEDED",
+      "intent": {
+        "schema_version": "1.0.0",
+        "intent_id": "intent-inv-003",
+        "vault_id": "vault-treasury-01",
+        "network": "mock-eth-sepolia",
+        "asset": "MOCK_ETH",
+        "unit": "gwei",
+        "amount": 6000000000,
+        "source_address": "0x1111111111111111111111111111111111111111",
+        "destination_address": "0x2222222222222222222222222222222222222222",
+        "nonce": 1,
+        "requested_by": "requester-treasury-bot",
+        "created_at": "2026-01-15T10:00:00Z",
+        "expires_at": "2026-01-15T11:00:00Z",
+        "key_epoch": 1,
+        "memo": "exceeds-single-limit"
+      }
+    },
+    {
+      "name": "zero_amount_rejected",
+      "expected_error_code": "ERR_INVALID_AMOUNT",
+      "intent": {
+        "schema_version": "1.0.0",
+        "intent_id": "intent-inv-004",
+        "vault_id": "vault-treasury-01",
+        "network": "mock-eth-sepolia",
+        "asset": "MOCK_ETH",
+        "unit": "gwei",
+        "amount": 0,
+        "source_address": "0x1111111111111111111111111111111111111111",
+        "destination_address": "0x2222222222222222222222222222222222222222",
+        "nonce": 1,
+        "requested_by": "requester-treasury-bot",
+        "created_at": "2026-01-15T10:00:00Z",
+        "expires_at": "2026-01-15T11:00:00Z",
+        "key_epoch": 1,
+        "memo": "zero-amount"
+      }
+    },
+    {
+      "name": "malformed_address_rejected",
+      "expected_error_code": "ERR_INVALID_ADDRESS",
+      "intent": {
+        "schema_version": "1.0.0",
+        "intent_id": "intent-inv-005",
+        "vault_id": "vault-treasury-01",
+        "network": "mock-eth-sepolia",
+        "asset": "MOCK_ETH",
+        "unit": "gwei",
+        "amount": 1000000,
+        "source_address": "0x1111111111111111111111111111111111111111",
+        "destination_address": "not-an-evm-address",
+        "nonce": 1,
+        "requested_by": "requester-treasury-bot",
+        "created_at": "2026-01-15T10:00:00Z",
+        "expires_at": "2026-01-15T11:00:00Z",
+        "key_epoch": 1,
+        "memo": "bad-address"
+      }
+    },
+    {
+      "name": "unsupported_asset_rejected",
+      "expected_error_code": "ERR_UNSUPPORTED_ASSET",
+      "intent": {
+        "schema_version": "1.0.0",
+        "intent_id": "intent-inv-006",
+        "vault_id": "vault-treasury-01",
+        "network": "mock-eth-sepolia",
+        "asset": "REAL_BTC",
+        "unit": "satoshi",
+        "amount": 1000,
+        "source_address": "0x1111111111111111111111111111111111111111",
+        "destination_address": "0x2222222222222222222222222222222222222222",
+        "nonce": 1,
+        "requested_by": "requester-treasury-bot",
+        "created_at": "2026-01-15T10:00:00Z",
+        "expires_at": "2026-01-15T11:00:00Z",
+        "key_epoch": 1,
+        "memo": "unknown-asset"
+      }
+    }
+  ]
+}

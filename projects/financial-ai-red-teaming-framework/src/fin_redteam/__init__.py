@@ -1,0 +1,103 @@
+"""Financial AI Red Teaming Framework public library interface."""
+
+from fin_redteam.agent import (
+    DeterministicFinancialAgent,
+    FinancialAgentAdapter,
+    OptionalLLMProviderStub,
+    create_agent,
+)
+from fin_redteam.audit import AuditLogger
+from fin_redteam.enforcement import EnforcementGateway, ExecutionContext
+from fin_redteam.errors import (
+    ConfigurationError,
+    RedTeamError,
+    SafetyInvariantError,
+    SchemaContractError,
+    UnsupportedInputError,
+)
+from fin_redteam.harness import FRAMEWORK_VERSION, EvaluationHarness, load_harness_config
+from fin_redteam.identity_policy import PolicyEngine
+from fin_redteam.mock_tools import MockFinancialSandbox
+from fin_redteam.models import (
+    SUPPORTED_SCHEMA_VERSION,
+    AgentMode,
+    ApprovalServiceStatus,
+    AuditEvent,
+    CanarySecret,
+    CategoryMetrics,
+    Decision,
+    EvaluationReport,
+    GoldPolicySet,
+    HarnessConfig,
+    MitigationStatus,
+    PolicyDecision,
+    ReasonCode,
+    RegressionFinding,
+    RegressionReport,
+    Scenario,
+    ScenarioOutcome,
+    ScenarioSuite,
+    ScenarioVerdict,
+    Severity,
+    SourceTrust,
+    ThreatCategory,
+    ToolCallRequest,
+    ToolCallResult,
+)
+from fin_redteam.redaction import CanaryGuard, encode_canary
+from fin_redteam.reporting import (
+    MITIGATION_CATALOG,
+    build_regression_report,
+    compare_against_baseline,
+    render_regression_markdown,
+)
+
+__all__ = [
+    "FRAMEWORK_VERSION",
+    "SUPPORTED_SCHEMA_VERSION",
+    "MITIGATION_CATALOG",
+    "AgentMode",
+    "ApprovalServiceStatus",
+    "AuditEvent",
+    "AuditLogger",
+    "CanaryGuard",
+    "CanarySecret",
+    "CategoryMetrics",
+    "ConfigurationError",
+    "Decision",
+    "DeterministicFinancialAgent",
+    "EnforcementGateway",
+    "EvaluationHarness",
+    "EvaluationReport",
+    "ExecutionContext",
+    "FinancialAgentAdapter",
+    "GoldPolicySet",
+    "HarnessConfig",
+    "MitigationStatus",
+    "MockFinancialSandbox",
+    "OptionalLLMProviderStub",
+    "PolicyDecision",
+    "PolicyEngine",
+    "ReasonCode",
+    "RedTeamError",
+    "RegressionFinding",
+    "RegressionReport",
+    "SafetyInvariantError",
+    "Scenario",
+    "ScenarioOutcome",
+    "ScenarioSuite",
+    "ScenarioVerdict",
+    "SchemaContractError",
+    "Severity",
+    "SourceTrust",
+    "ThreatCategory",
+    "ToolCallRequest",
+    "ToolCallResult",
+    "UnsupportedInputError",
+    "build_regression_report",
+    "compare_against_baseline",
+    "create_agent",
+    "encode_canary",
+    "load_harness_config",
+    "render_regression_markdown",
+]

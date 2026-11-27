@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_name": "synthetic-trading-eval-v1",
+  "expected_case_count": 4,
+  "expected_alerts": [
+    {
+      "rule_id": "TISM-SIGMA-003",
+      "source_event_id": "eval-005",
+      "description": "Untrusted IP login by dev-compromised"
+    },
+    {
+      "rule_id": "TISM-SIGMA-002",
+      "source_event_id": "eval-006",
+      "description": "Unauthorized privilege escalation (risk-override) by dev-compromised"
+    },
+    {
+      "rule_id": "TISM-SIGMA-001",
+      "source_event_id": "eval-007",
+      "description": "Unexpected direct config edit on risk-engine limits.yaml (duplicate eval-007-dup deduplicated)"
+    },
+    {
+      "rule_id": "TISM-SIGMA-004",
+      "source_event_id": "eval-008",
+      "description": "Unauthorized risk limit override on order audit"
+    },
+    {
+      "rule_id": "TISM-SIGMA-003",
+      "source_event_id": "eval-009",
+      "description": "Service account interactive SSH login by svc-market-data"
+    },
+    {
+      "rule_id": "TISM-SIGMA-005",
+      "source_event_id": "eval-010",
+      "description": "Unauthorized binary_swap deployment by svc-market-data"
+    },
+    {
+      "rule_id": "TISM-STATE-001",
+      "source_event_id": "eval-014",
+      "description": "Brute-force authentication failure burst by ext-scanner (eval-011..eval-014)"
+    },
+    {
+      "rule_id": "TISM-STATE-002",
+      "source_event_id": "eval-019",
+      "description": "Order submission velocity burst by algo-bot-rogue (eval-015..eval-019)"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{not valid json at all
+{"event_id":"bad-001","event_type":"dns_query","timestamp":"2026-06-01T10:00:00Z","actor":"user1","service":"dns","host":"h1","action":"query"}
+{"event_id":"bad-002","event_type":"auth_log","timestamp":"2026/06/01 10:00:00","actor":"user1","service":"order-router","host":"trd-ord-01","action":"login"}
+{"event_id":"bad-003","event_type":"config_diff","timestamp":"2026-06-01T10:00:00Z","actor":"user1","service":"order-router","host":"trd-ord-01","action":"config_edit","payload":{}}
+{"event_id":"bad-004","event_type":"auth_log","timestamp":"2026-06-01T10:00:00Z","actor":"user1","service":"order-router","host":"trd-ord-01","action":"login","source_ip":"not-an-ip"}

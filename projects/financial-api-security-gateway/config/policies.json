@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "policy_version": "2026.11.v1",
+  "default_effect": "deny",
+  "rules": [
+    {
+      "id": "pol-accounts-balance-read",
+      "method": "GET",
+      "path_pattern": "/v1/accounts/{account_id}/balance",
+      "required_scopes": ["accounts:read"],
+      "allowed_roles": ["ledger-reader", "order-router", "risk-auditor"],
+      "require_mtls": true,
+      "require_signature": true,
+      "rate_limit_rps": 25,
+      "rate_limit_burst": 30,
+      "max_body_bytes": 0
+    },
+    {
+      "id": "pol-orders-create",
+      "method": "POST",
+      "path_pattern": "/v1/orders",
+      "required_scopes": ["orders:write", "accounts:read"],
+      "allowed_roles": ["order-router"],
+      "require_mtls": true,
+      "require_signature": true,
+      "rate_limit_rps": 10,
+      "rate_limit_burst": 10,
+      "max_body_bytes": 16384
+    },
+    {
+      "id": "pol-orders-status-read",
+      "method": "GET",
+      "path_pattern": "/v1/orders/{order_id}",
+      "required_scopes": ["orders:read"],
+      "allowed_roles": ["order-router", "risk-auditor"],
+      "require_mtls": true,
+      "require_signature": true,
+      "rate_limit_rps": 20,
+      "rate_limit_burst": 25,
+      "max_body_bytes": 0
+    },
+    {
+      "id": "pol-audit-export",
+      "method": "GET",
+      "path_pattern": "/v1/audit/export",
+      "required_scopes": ["audit:read"],
+      "allowed_roles": ["risk-auditor"],
+      "require_mtls": true,
+      "require_signature": true,
+      "rate_limit_rps": 5,
+      "rate_limit_burst": 5,
+      "max_body_bytes": 0
+    },
+    {
+      "id": "pol-slow-timeout-test",
+      "method": "GET",
+      "path_pattern": "/v1/slow",
+      "required_scopes": ["accounts:read"],
+      "allowed_roles": ["ledger-reader", "order-router", "risk-auditor"],
+      "require_mtls": true,
+      "require_signature": true,
+      "rate_limit_rps": 10,
+      "rate_limit_burst": 10,
+      "max_body_bytes": 0
+    }
+  ]
+}

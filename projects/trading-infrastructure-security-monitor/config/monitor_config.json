@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "environment": "synthetic-trading-lab",
+  "deterministic_seed": 2026065,
+  "rules_dir": "config/rules",
+  "policy_path": "config/policy.json",
+  "redaction_policy_path": "config/redaction_policy.json",
+  "containment_mode": "simulation_only",
+  "live_containment_enabled": false,
+  "correlation_window_seconds": 900,
+  "telemetry_gap_threshold_seconds": 300,
+  "expected_sources": [
+    "auth_log",
+    "config_diff",
+    "deployment_audit",
+    "order_audit"
+  ],
+  "deduplication_enabled": true,
+  "otel_service_name": "trading-infrastructure-security-monitor",
+  "otel_service_version": "1.0.0"
+}

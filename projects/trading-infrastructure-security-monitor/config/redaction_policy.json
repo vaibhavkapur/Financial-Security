@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "replacement_token": "[REDACTED]",
+  "preserve_sha256_fingerprint": true,
+  "sensitive_field_names": [
+    "password",
+    "passwd",
+    "secret",
+    "api_key",
+    "apikey",
+    "token",
+    "access_token",
+    "refresh_token",
+    "bearer_token",
+    "authorization",
+    "private_key",
+    "signing_key",
+    "fix_password",
+    "session_secret",
+    "client_secret",
+    "ssn",
+    "tax_id",
+    "account_secret",
+    "credential",
+    "credentials",
+    "db_password"
+  ],
+  "value_patterns": [
+    {
+      "name": "bearer_token",
+      "pattern": "(?i)Bearer\\s+[A-Za-z0-9._\\-+/=]{12,}"
+    },
+    {
+      "name": "jwt_token",
+      "pattern": "eyJ[A-Za-z0-9_\\-]{8,}\\.eyJ[A-Za-z0-9_\\-]{8,}\\.[A-Za-z0-9_\\-]{8,}"
+    },
+    {
+      "name": "synthetic_api_key",
+      "pattern": "(?i)(?:sk|pk|tism|fix)_(?:live|test|sim|prod)_[A-Za-z0-9]{12,}"
+    },
+    {
+      "name": "pem_private_key",
+      "pattern": "-----BEGIN [A-Z ]*PRIVATE KEY-----[\\s\\S]*?-----END [A-Z ]*PRIVATE KEY-----"
+    },
+    {
+      "name": "inline_secret_assignment",
+      "pattern": "(?i)(password|secret|api_key|token|fix_password)\\s*[:=]\\s*['\"]?[^\\s'\",;}]{4,}['\"]?"
+    }
+  ]
+}

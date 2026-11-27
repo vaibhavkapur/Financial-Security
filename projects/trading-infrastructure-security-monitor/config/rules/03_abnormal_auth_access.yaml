@@ -1,0 +1,29 @@
+title: Abnormal Authentication Access to Trading Infrastructure
+id: TISM-SIGMA-003
+status: stable
+level: high
+description: Detects interactive logins by service accounts, logins from untrusted networks, or off-hours interactive access to trading hosts.
+logsource:
+  category: auth_log
+  product: trading-infrastructure
+detection:
+  selection_svc_interactive:
+    event_type: auth_log
+    action: login
+    outcome: success
+    attributes.is_service_account: "true"
+    attributes.auth_method: interactive_ssh
+  selection_untrusted_net:
+    event_type: auth_log
+    action: login
+    outcome: success
+    attributes.source_ip_trusted: "false"
+  selection_off_hours:
+    event_type: auth_log
+    action: login
+    outcome: success
+    attributes.off_hours: "true"
+  condition: selection_svc_interactive or selection_untrusted_net or selection_off_hours
+tags:
+  - attack.initial_access
+  - trading.access_control

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "policy_version": "aiap-policy-v1.0.0",
+  "issuer_id": "aiap-authority.mock.local",
+  "signing_algorithm": "EdDSA",
+  "default_grant_ttl_seconds": 300,
+  "max_grant_ttl_seconds": 900,
+  "max_approval_ttl_seconds": 300,
+  "max_delegation_depth": 2,
+  "clock_skew_seconds": 0,
+  "deny_by_default": true,
+  "allowed_audiences": [
+    "mock-treasury-api",
+    "mock-settlement-engine",
+    "mock-portfolio-rebalancer",
+    "mock-market-data-readonly"
+  ],
+  "supported_action_types": [
+    "payment.initiate",
+    "trade.execute",
+    "portfolio.rebalance",
+    "account.read"
+  ],
+  "supported_currencies": [
+    "USD",
+    "EUR",
+    "GBP"
+  ],
+  "storage": {
+    "driver": "sqlite",
+    "dsn": "file::memory:?cache=shared"
+  },
+  "redaction": {
+    "redact_fields": [
+      "bearer_token",
+      "raw_jwt",
+      "private_key",
+      "secret",
+      "api_key",
+      "password",
+      "ssn",
+      "tax_id",
+      "memo_pii"
+    ],
+    "replacement": "[REDACTED]"
+  },
+  "evaluation": {
+    "random_seed": 20261127
+  }
+}

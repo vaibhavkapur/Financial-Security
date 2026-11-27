@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "run_id": "RUN-534dce8bd75e",
+    "schema_version": "1.0.0",
+    "environment": "synthetic-trading-lab",
+    "deterministic_seed": 2026065,
+    "containment_mode": "simulation_only",
+    "live_containment": false,
+    "go_version": "go1.27.1",
+    "os": "darwin",
+    "arch": "arm64",
+    "input_path": "data/fixtures/reference/reference_events.jsonl",
+    "input_sha256": "4b768804cb58c9621b2e2d08c697f700b860261fce79c9769f06f9cd9efc3648"
+  },
+  "metrics": {
+    "events_ingested": 5,
+    "events_normalized": 5,
+    "events_deduplicated": 0,
+    "events_invalid": 0,
+    "fields_redacted": 1,
+    "telemetry_gaps_detected": 0,
+    "alerts_total": 1,
+    "alerts_active": 1,
+    "alerts_suppressed": 0,
+    "cases_created": 1,
+    "proposals_created": 1
+  },
+  "telemetry_gaps": [],
+  "validation_errors": [],
+  "alerts": [
+    {
+      "alert_id": "ALT-e9b56076c3da",
+      "rule_id": "TISM-SIGMA-001",
+      "rule_title": "Unexpected Direct Configuration Edit on Protected Trading Service",
+      "category": "config_diff",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:09:00Z",
+      "actor": "dev-unexpected",
+      "service": "risk-engine",
+      "host": "trd-rsk-01",
+      "summary": "Unexpected Direct Configuration Edit on Protected Trading Service by actor dev-unexpected on risk-engine (deny: missing change_ticket)",
+      "source_event_ids": [
+        "ref-evt-005"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "config_edit",
+        "config_path": "/etc/trading/risk-engine/limits.yaml",
+        "event_type": "config_diff",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "source_ip": "10.10.9.42"
+      },
+      "tags": [
+        "attack.defense_evasion",
+        "trading.config_integrity"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "CASE-8b8cc5eaf144",
+      "title": "[HIGH] 1 correlated alert(s) involving dev-unexpected on risk-engine",
+      "severity": "high",
+      "status": "open",
+      "first_seen": "2026-06-01T10:09:00Z",
+      "last_seen": "2026-06-01T10:09:00Z",
+      "primary_actor": "dev-unexpected",
+      "affected_services": [
+        "risk-engine"
+      ],
+      "affected_hosts": [
+        "trd-rsk-01"
+      ],
+      "alert_ids": [
+        "ALT-e9b56076c3da"
+      ],
+      "source_event_ids": [
+        "ref-evt-005"
+      ],
+      "correlation_reasons": [
+        "single_alert_case"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:09:00Z",
+          "alert_id": "ALT-e9b56076c3da",
+          "rule_id": "TISM-SIGMA-001",
+          "severity": "high",
+          "summary": "Unexpected Direct Configuration Edit on Protected Trading Service by actor dev-unexpected on risk-engine (deny: missing change_ticket)",
+          "source_event_ids": [
+            "ref-evt-005"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_revert_config_diff"
+      ]
+    }
+  ],
+  "containment_proposals": [
+    {
+      "proposal_id": "PROP-d4da19caaab5",
+      "case_id": "CASE-8b8cc5eaf144",
+      "action_type": "simulate_revert_config_diff",
+      "target": "service:risk-engine",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "high",
+      "requested_by": "tism-correlator",
+      "required_approvals": 1,
+      "status": "pending_review",
+      "approvals": [],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:risk-engine",
+        "simulated_host_scope:trd-rsk-01",
+        "action:simulate_revert_config_diff"
+      ],
+      "rollback_plan": "Simulation rollback: re-apply last signed baseline config manifest for service:risk-engine",
+      "simulated_diff": {},
+      "created_at": "2026-06-01T12:00:00.006Z"
+    }
+  ],
+  "reviewer_audit_log": []
+}

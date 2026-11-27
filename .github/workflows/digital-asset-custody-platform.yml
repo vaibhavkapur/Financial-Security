@@ -1,0 +1,49 @@
+name: Digital Asset Custody Platform CI
+
+on:
+  push:
+    paths:
+      - 'projects/digital-asset-custody-platform/**'
+      - '.github/workflows/digital-asset-custody-platform.yml'
+  pull_request:
+    paths:
+      - 'projects/digital-asset-custody-platform/**'
+      - '.github/workflows/digital-asset-custody-platform.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/digital-asset-custody-platform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: projects/digital-asset-custody-platform/go.mod
+
+      - name: Static analysis (go vet)
+        run: go vet ./...
+
+      - name: Unit, integration, resilience, and operational tests (-race)
+        run: go test -race -count=1 -v ./...
+
+      - name: Reproducible demo and scenario report generation
+        run: ./scripts/generate_reports.sh
+
+      - name: Verify no sensitive material in generated reports
+        run: |
+          if grep -E -i "(BEGIN PRIVATE KEY|TESTNET_MOCK_SEED|privKey)" reports/*.json; then
+            echo "Sensitive pattern detected in reports"
+            exit 1
+          fi
+
+      - name: Upload machine-readable reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: custody-platform-reports
+          path: projects/digital-asset-custody-platform/reports/*.json

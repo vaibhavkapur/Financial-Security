@@ -1,0 +1,260 @@
+{
+  "fixture_version": "1.0.0",
+  "description": "Deterministic M1/M2 reference scenario with synthetic principals and hand-calculated expected authorization outcomes.",
+  "provenance": "100% synthetic educational fixture; no real customer records, credentials, or capital.",
+  "base_time_utc": "2026-11-27T12:00:00Z",
+  "seed_label": "aiap-reference-v1",
+  "tenant_id": "mock-tenant-alpha",
+  "principals": [
+    {
+      "principal_id": "delegator.treasury.alice",
+      "principal_type": "human_delegator",
+      "display_name": "Alice Vance (Synthetic Treasury Controller)",
+      "tenant_id": "mock-tenant-alpha",
+      "key_seed": "ref-delegator-alice",
+      "active": true
+    },
+    {
+      "principal_id": "agent.rebalancer.01",
+      "principal_type": "agent",
+      "display_name": "Portfolio Rebalancer Agent 01 (Synthetic)",
+      "tenant_id": "mock-tenant-alpha",
+      "key_seed": "ref-agent-rebalancer",
+      "active": true
+    },
+    {
+      "principal_id": "agent.subexec.02",
+      "principal_type": "agent",
+      "display_name": "Sub-Execution Settlement Agent 02 (Synthetic)",
+      "tenant_id": "mock-tenant-alpha",
+      "key_seed": "ref-agent-subexec",
+      "active": true
+    }
+  ],
+  "root_grant": {
+    "grant_id": "grt-ref-root-001",
+    "can_delegate": true,
+    "delegator_id": "delegator.treasury.alice",
+    "actor_id": "agent.rebalancer.01",
+    "tenant_id": "mock-tenant-alpha",
+    "audiences": ["mock-treasury-api", "mock-portfolio-rebalancer"],
+    "scopes": [
+      { "action_type": "payment.initiate", "resource_pattern": "mock-acct-100*" },
+      { "action_type": "portfolio.rebalance", "resource_pattern": "mock-port-alpha*" }
+    ],
+    "allowed_counterparties": ["mock-cp-clearing-a", "mock-cp-custody-b"],
+    "spending_limit": {
+      "currency": "USD",
+      "max_per_action_minor": 50000,
+      "max_cumulative_minor": 100000,
+      "require_approval_above_minor": 15000
+    },
+    "ttl_seconds": 300
+  },
+  "sub_grant": {
+    "grant_id": "grt-ref-sub-002",
+    "parent_grant_id": "grt-ref-root-001",
+    "can_delegate": false,
+    "delegator_id": "agent.rebalancer.01",
+    "actor_id": "agent.subexec.02",
+    "tenant_id": "mock-tenant-alpha",
+    "audiences": ["mock-treasury-api"],
+    "scopes": [
+      { "action_type": "payment.initiate", "resource_pattern": "mock-acct-1001" }
+    ],
+    "allowed_counterparties": ["mock-cp-clearing-a"],
+    "spending_limit": {
+      "currency": "USD",
+      "max_per_action_minor": 20000,
+      "max_cumulative_minor": 40000,
+      "require_approval_above_minor": 10000
+    },
+    "ttl_seconds": 180
+  },
+  "steps": [
+    {
+      "step_id": "REF-01",
+      "description": "Within-limit payment below approval threshold ($100.00 = 10000 minor) on root grant",
+      "advance_seconds": 0,
+      "use_grant": "root",
+      "action": {
+        "action_id": "act-ref-01",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 10000,
+        "currency": "USD",
+        "metadata": { "purpose": "mock-liquidity-sweep", "memo_pii": "synthetic-note-must-redact" }
+      },
+      "approval_mode": "none",
+      "expected_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED",
+      "expected_remaining_minor": 90000
+    },
+    {
+      "step_id": "REF-02",
+      "description": "High-value payment ($250.00 = 25000 minor) without required exact-action approval",
+      "advance_seconds": 10,
+      "use_grant": "root",
+      "action": {
+        "action_id": "act-ref-02",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 25000,
+        "currency": "USD"
+      },
+      "approval_mode": "none",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_REQUIRED",
+      "expected_remaining_minor": 90000
+    },
+    {
+      "step_id": "REF-03",
+      "description": "High-value payment ($250.00 = 25000 minor) with valid delegator exact-action approval",
+      "advance_seconds": 10,
+      "use_grant": "root",
+      "action": {
+        "action_id": "act-ref-03",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 25000,
+        "currency": "USD"
+      },
+      "approval_mode": "valid",
+      "approval_id": "app-ref-03",
+      "expected_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED",
+      "expected_remaining_minor": 65000
+    },
+    {
+      "step_id": "REF-04",
+      "description": "Replay of already consumed approval app-ref-03 must be denied",
+      "advance_seconds": 5,
+      "use_grant": "root",
+      "action": {
+        "action_id": "act-ref-03",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 25000,
+        "currency": "USD"
+      },
+      "approval_mode": "reuse_previous",
+      "approval_id": "app-ref-03",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_ALREADY_USED",
+      "expected_remaining_minor": 65000
+    },
+    {
+      "step_id": "REF-05",
+      "description": "Altered amount (+1 cent) against signed approval must be denied",
+      "advance_seconds": 5,
+      "use_grant": "root",
+      "action": {
+        "action_id": "act-ref-05",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1002",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 20000,
+        "currency": "USD"
+      },
+      "approval_mode": "altered_amount_plus_one",
+      "approval_id": "app-ref-05",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "expected_remaining_minor": 65000
+    },
+    {
+      "step_id": "REF-06",
+      "description": "Audience mismatch (mock-settlement-engine not in grant aud)",
+      "advance_seconds": 5,
+      "use_grant": "root",
+      "action": {
+        "action_id": "act-ref-06",
+        "action_type": "payment.initiate",
+        "audience": "mock-settlement-engine",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 5000,
+        "currency": "USD"
+      },
+      "approval_mode": "none",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_AUDIENCE_MISMATCH",
+      "expected_remaining_minor": 65000
+    },
+    {
+      "step_id": "REF-07",
+      "description": "Attenuated sub-delegated grant executes $50.00 (5000 minor) payment; debits both sub and root grants",
+      "advance_seconds": 5,
+      "use_grant": "sub",
+      "action": {
+        "action_id": "act-ref-07",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 5000,
+        "currency": "USD"
+      },
+      "approval_mode": "none",
+      "expected_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED",
+      "expected_remaining_minor": 35000
+    },
+    {
+      "step_id": "REF-08",
+      "description": "Sub-grant attempts out-of-scope resource mock-acct-1002 (only mock-acct-1001 allowed)",
+      "advance_seconds": 5,
+      "use_grant": "sub",
+      "action": {
+        "action_id": "act-ref-08",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1002",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 5000,
+        "currency": "USD"
+      },
+      "approval_mode": "none",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_SCOPE_DENIED",
+      "expected_remaining_minor": 35000
+    },
+    {
+      "step_id": "REF-09",
+      "description": "Advance clock past sub-grant expiry (t+200s > 180s TTL); expired grant must be denied",
+      "advance_seconds": 155,
+      "use_grant": "sub",
+      "action": {
+        "action_id": "act-ref-09",
+        "action_type": "payment.initiate",
+        "audience": "mock-treasury-api",
+        "tenant_id": "mock-tenant-alpha",
+        "resource_id": "mock-acct-1001",
+        "counterparty_id": "mock-cp-clearing-a",
+        "amount_minor": 1000,
+        "currency": "USD"
+      },
+      "approval_mode": "none",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_GRANT_EXPIRED",
+      "expected_remaining_minor": 0
+    }
+  ]
+}

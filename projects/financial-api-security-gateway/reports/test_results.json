@@ -1,0 +1,148 @@
+{
+  "audit_events": 10,
+  "audit_secret_leaks": 0,
+  "metadata": {
+    "schema_version": "1.0.0",
+    "generated_at_utc": "2026-11-27T15:07:55Z",
+    "go_version": "go1.27.1",
+    "goos": "darwin",
+    "goarch": "arm64",
+    "num_cpu": 10,
+    "config_version": "1.0.0",
+    "policy_version": "2026.11.v1",
+    "seed": 42
+  },
+  "metrics_snapshot": {
+    "total_requests": 10,
+    "allowed_requests": 2,
+    "denied_requests": 8,
+    "upstream_timeouts": 1,
+    "replay_rejections": 1,
+    "rate_limit_hits": 0,
+    "reason_code_counts": {
+      "ERR_MTLS_REVOKED": 1,
+      "ERR_NONCE_REPLAY": 1,
+      "ERR_POLICY_DEFAULT_DENY": 1,
+      "ERR_SCOPE_INSUFFICIENT": 1,
+      "ERR_TOKEN_AUDIENCE_MISMATCH": 1,
+      "ERR_TOKEN_EXPIRED": 1,
+      "ERR_TOKEN_KEY_REVOKED": 1,
+      "ERR_UPSTREAM_TIMEOUT": 1,
+      "OK_ALLOWED": 2
+    }
+  },
+  "passed": 11,
+  "scenarios": [
+    {
+      "id": "S01-valid-request",
+      "category": "positive",
+      "description": "Authorized mTLS+OIDC+Signed balance read",
+      "expected_status": 200,
+      "actual_status": 200,
+      "expected_reason": "OK_ALLOWED",
+      "actual_reason": "OK_ALLOWED",
+      "passed": true
+    },
+    {
+      "id": "S02-untrusted-ca-mtls",
+      "category": "mtls",
+      "description": "Client certificate from untrusted rogue CA rejected at TLS 1.3 handshake",
+      "expected_status": 0,
+      "actual_status": 0,
+      "expected_reason": "TLS_HANDSHAKE_REJECTED",
+      "actual_reason": "TLS_HANDSHAKE_REJECTED",
+      "passed": true
+    },
+    {
+      "id": "S03-expired-token",
+      "category": "domain",
+      "description": "Expired JWT rejected",
+      "expected_status": 401,
+      "actual_status": 401,
+      "expected_reason": "ERR_TOKEN_EXPIRED",
+      "actual_reason": "ERR_TOKEN_EXPIRED",
+      "passed": true
+    },
+    {
+      "id": "S04-wrong-audience",
+      "category": "domain",
+      "description": "JWT with wrong audience rejected",
+      "expected_status": 401,
+      "actual_status": 401,
+      "expected_reason": "ERR_TOKEN_AUDIENCE_MISMATCH",
+      "actual_reason": "ERR_TOKEN_AUDIENCE_MISMATCH",
+      "passed": true
+    },
+    {
+      "id": "S05-replay-nonce",
+      "category": "integration",
+      "description": "Replayed nonce rejected",
+      "expected_status": 409,
+      "actual_status": 409,
+      "expected_reason": "ERR_NONCE_REPLAY",
+      "actual_reason": "ERR_NONCE_REPLAY",
+      "passed": true
+    },
+    {
+      "id": "S06-scope-escalation",
+      "category": "integration",
+      "description": "Order creation without orders:write denied",
+      "expected_status": 403,
+      "actual_status": 403,
+      "expected_reason": "ERR_SCOPE_INSUFFICIENT",
+      "actual_reason": "ERR_SCOPE_INSUFFICIENT",
+      "passed": true
+    },
+    {
+      "id": "S07-default-deny",
+      "category": "policy",
+      "description": "Unmatched endpoint denied by default",
+      "expected_status": 403,
+      "actual_status": 403,
+      "expected_reason": "ERR_POLICY_DEFAULT_DENY",
+      "actual_reason": "ERR_POLICY_DEFAULT_DENY",
+      "passed": true
+    },
+    {
+      "id": "S08-key-rotation-new-accepted",
+      "category": "rotation",
+      "description": "Token signed with rotated OIDC key accepted",
+      "expected_status": 200,
+      "actual_status": 200,
+      "expected_reason": "OK_ALLOWED",
+      "actual_reason": "OK_ALLOWED",
+      "passed": true
+    },
+    {
+      "id": "S09-key-rotation-old-revoked",
+      "category": "revocation",
+      "description": "Token signed with revoked OIDC key rejected",
+      "expected_status": 401,
+      "actual_status": 401,
+      "expected_reason": "ERR_TOKEN_KEY_REVOKED",
+      "actual_reason": "ERR_TOKEN_KEY_REVOKED",
+      "passed": true
+    },
+    {
+      "id": "S10-upstream-timeout",
+      "category": "failure",
+      "description": "Slow upstream triggers explicit 504 timeout",
+      "expected_status": 504,
+      "actual_status": 504,
+      "expected_reason": "ERR_UPSTREAM_TIMEOUT",
+      "actual_reason": "ERR_UPSTREAM_TIMEOUT",
+      "passed": true
+    },
+    {
+      "id": "S11-cert-revocation",
+      "category": "revocation",
+      "description": "Revoked mTLS certificate rejected on keep-alive connection",
+      "expected_status": 401,
+      "actual_status": 401,
+      "expected_reason": "ERR_MTLS_REVOKED",
+      "actual_reason": "ERR_MTLS_REVOKED",
+      "passed": true
+    }
+  ],
+  "total": 11
+}

@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0.0",
+  "policy_version": "aiap-policy-v1.0.0",
+  "random_seed": 20261127,
+  "evaluated_at_utc": "2026-11-27T12:00:00Z",
+  "total_cases": 16,
+  "passed_cases": 16,
+  "blocked_attacks": 16,
+  "fuzz_mutations_run": 20,
+  "fuzz_mutations_blocked": 20,
+  "replay_verified": true,
+  "passed": true,
+  "cases": [
+    {
+      "case_id": "ADV-01",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempts to widen resource scope from mock-acct-100* to mock-acct-*",
+      "expected_code": "ERR_DELEGATION_ESCALATION",
+      "observed_code": "ERR_DELEGATION_ESCALATION",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_ESCALATION: child scope (payment.initiate:mock-acct-*) is wider than parent grant scopes"
+    },
+    {
+      "case_id": "ADV-02",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempts to raise max_per_action_minor above parent cap",
+      "expected_code": "ERR_DELEGATION_ESCALATION",
+      "observed_code": "ERR_DELEGATION_ESCALATION",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_ESCALATION: child max_per_action_minor (75000) exceeds parent (50000)"
+    },
+    {
+      "case_id": "ADV-03",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempts to raise require_approval_above_minor to bypass approvals",
+      "expected_code": "ERR_DELEGATION_ESCALATION",
+      "observed_code": "ERR_DELEGATION_ESCALATION",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_ESCALATION: child require_approval_above_minor (25000) cannot weaken parent threshold (10000)"
+    },
+    {
+      "case_id": "ADV-04",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempts to extend grant expiry past parent TTL",
+      "expected_code": "ERR_DELEGATION_ESCALATION",
+      "observed_code": "ERR_DELEGATION_ESCALATION",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_ESCALATION: child expires_at_utc (2026-11-27T12:10:00Z) exceeds parent expiry (2026-11-27T12:05:00Z)"
+    },
+    {
+      "case_id": "ADV-05",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempts to widen audience to mock-settlement-engine",
+      "expected_code": "ERR_DELEGATION_ESCALATION",
+      "observed_code": "ERR_DELEGATION_ESCALATION",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_ESCALATION: child audience \"mock-settlement-engine\" is not permitted by parent grant \"grt-adv-root\""
+    },
+    {
+      "case_id": "ADV-06",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempts to drop parent counterparty allowlist",
+      "expected_code": "ERR_DELEGATION_ESCALATION",
+      "observed_code": "ERR_DELEGATION_ESCALATION",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_ESCALATION: child grant cannot drop parent counterparty restrictions"
+    },
+    {
+      "case_id": "ADV-07",
+      "category": "delegation_escalation",
+      "description": "Sub-delegation attempted from non-delegable parent grant",
+      "expected_code": "ERR_DELEGATION_NOT_ALLOWED",
+      "observed_code": "ERR_DELEGATION_NOT_ALLOWED",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_NOT_ALLOWED: parent grant \"grt-adv-nodelegate\" does not allow further delegation"
+    },
+    {
+      "case_id": "ADV-08",
+      "category": "delegation_escalation",
+      "description": "Delegation chain depth 3 exceeds policy max_delegation_depth=2",
+      "expected_code": "ERR_DELEGATION_DEPTH_EXCEEDED",
+      "observed_code": "ERR_DELEGATION_DEPTH_EXCEEDED",
+      "blocked": true,
+      "passed": true,
+      "detail": "ERR_DELEGATION_DEPTH_EXCEEDED: delegation depth 3 exceeds policy max_delegation_depth 2"
+    },
+    {
+      "case_id": "ADV-09",
+      "category": "crypto_downgrade",
+      "description": "Forged HS256 JWT attempting algorithm confusion attack",
+      "expected_code": "ERR_TOKEN_INVALID_ALG",
+      "observed_code": "ERR_TOKEN_INVALID_ALG",
+      "blocked": true,
+      "passed": true,
+      "detail": "token header signing algorithm rejected: token signature is invalid: signing method HS256 is invalid"
+    },
+    {
+      "case_id": "ADV-10",
+      "category": "confused_deputy",
+      "description": "Action directed at audience outside grant aud claim",
+      "expected_code": "ERR_AUDIENCE_MISMATCH",
+      "observed_code": "ERR_AUDIENCE_MISMATCH",
+      "blocked": true,
+      "passed": true,
+      "detail": "audience \"mock-settlement-engine\" not permitted by grant \"grt-adv-root\""
+    },
+    {
+      "case_id": "ADV-11",
+      "category": "payload_tampering",
+      "description": "Approved payment amount altered from 25000 to 25001 minor units",
+      "expected_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "observed_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "blocked": true,
+      "passed": true,
+      "detail": "approval \"app-adv-01\" action_digest mismatch (possible altered amount or payload)"
+    },
+    {
+      "case_id": "ADV-12",
+      "category": "approval_forgery",
+      "description": "Agent attempts to self-sign approval for its own high-value action",
+      "expected_code": "ERR_APPROVAL_INVALID_SIG",
+      "observed_code": "ERR_APPROVAL_INVALID_SIG",
+      "blocked": true,
+      "passed": true,
+      "detail": "approval \"app-adv-self\" cryptographic signature or approver authority invalid"
+    },
+    {
+      "case_id": "ADV-13",
+      "category": "seeded_payload_fuzz",
+      "description": "20 seeded payload mutations against exact-action approval",
+      "expected_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "observed_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "blocked": true,
+      "passed": true,
+      "detail": "blocked 20/20 payload mutations"
+    },
+    {
+      "case_id": "ADV-14",
+      "category": "duplicate_approval_race",
+      "description": "10 concurrent requests reusing the same exact-action approval",
+      "expected_code": "ERR_APPROVAL_ALREADY_USED",
+      "observed_code": "ERR_APPROVAL_ALREADY_USED",
+      "blocked": true,
+      "passed": true,
+      "detail": "allows=1 (expected 1), denied_already_used=9 (expected 9)"
+    },
+    {
+      "case_id": "ADV-15",
+      "category": "cascading_revocation",
+      "description": "Revoking root grant immediately invalidates depth-2 sub-delegated grant",
+      "expected_code": "ERR_GRANT_REVOKED",
+      "observed_code": "ERR_GRANT_REVOKED",
+      "blocked": true,
+      "passed": true,
+      "detail": "grant grt-adv-root revoked: adversarial test cascading revoke"
+    },
+    {
+      "case_id": "ADV-16",
+      "category": "expired_grant",
+      "description": "Action submitted 1 second after grant expiration",
+      "expected_code": "ERR_GRANT_EXPIRED",
+      "observed_code": "ERR_GRANT_EXPIRED",
+      "blocked": true,
+      "passed": true,
+      "detail": "signed grant token is expired"
+    }
+  ]
+}

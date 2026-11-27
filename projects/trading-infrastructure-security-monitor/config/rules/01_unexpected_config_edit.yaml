@@ -1,0 +1,19 @@
+title: Unexpected Direct Configuration Edit on Protected Trading Service
+id: TISM-SIGMA-001
+status: stable
+level: high
+description: Detects configuration modifications to protected trading paths without a verified change ticket or through non-authorized edit methods.
+logsource:
+  category: config_diff
+  product: trading-infrastructure
+detection:
+  selection_protected:
+    event_type: config_diff
+    attributes.config_path|startswith: /etc/trading/
+  filter_authorized_ci:
+    actor: svc-ci-deployer
+    attributes.change_ticket_valid: "true"
+  condition: selection_protected and not filter_authorized_ci
+tags:
+  - attack.defense_evasion
+  - trading.config_integrity

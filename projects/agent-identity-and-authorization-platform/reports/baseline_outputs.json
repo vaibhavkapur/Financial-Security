@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0.0",
+  "policy_version": "aiap-policy-v1.0.0",
+  "fixture_version": "1.0.0",
+  "runtime_env": {
+    "go_version": "go1.27.1",
+    "goarch": "arm64",
+    "goos": "darwin",
+    "num_cpu": "10"
+  },
+  "steps": [
+    {
+      "step_id": "REF-01",
+      "description": "Within-limit payment below approval threshold ($100.00 = 10000 minor) on root grant",
+      "expected_decision": "ALLOW",
+      "observed_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED",
+      "observed_reason_code": "ALLOW_AUTHORIZED",
+      "expected_remaining_minor": 90000,
+      "observed_remaining_minor": 90000,
+      "action_digest": "a99c208c4e3711c143b80c67ec1ef593eb44dcb73351c685ef7cc5a21c222b99",
+      "audit_entry_hash": "bc7074010343bf54b1178a7d4c0d34616d8cd53a2eb704cad147e51cba8cb0e0",
+      "passed": true
+    },
+    {
+      "step_id": "REF-02",
+      "description": "High-value payment ($250.00 = 25000 minor) without required exact-action approval",
+      "expected_decision": "DENY",
+      "observed_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_REQUIRED",
+      "observed_reason_code": "ERR_APPROVAL_REQUIRED",
+      "expected_remaining_minor": 90000,
+      "observed_remaining_minor": 90000,
+      "action_digest": "80494b5ff0376c6b5842491cb1ea5df7d4aa54551550a11737d9279030a0e0ed",
+      "audit_entry_hash": "955791e8b0d0e40b78c1109e78130e997bc436578ec0957b3761b945ee7b3d43",
+      "passed": true
+    },
+    {
+      "step_id": "REF-03",
+      "description": "High-value payment ($250.00 = 25000 minor) with valid delegator exact-action approval",
+      "expected_decision": "ALLOW",
+      "observed_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED",
+      "observed_reason_code": "ALLOW_AUTHORIZED",
+      "expected_remaining_minor": 65000,
+      "observed_remaining_minor": 65000,
+      "action_digest": "38ac3e13c54d12a1f444e794d411ab988273380216523fdd1528d12e1944dc32",
+      "audit_entry_hash": "82e45e9bbe0faa83c2e083fffaf1fa2fa0fb3efbee0e402b3e28c84b5ce0772c",
+      "passed": true
+    },
+    {
+      "step_id": "REF-04",
+      "description": "Replay of already consumed approval app-ref-03 must be denied",
+      "expected_decision": "DENY",
+      "observed_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_ALREADY_USED",
+      "observed_reason_code": "ERR_APPROVAL_ALREADY_USED",
+      "expected_remaining_minor": 65000,
+      "observed_remaining_minor": 65000,
+      "action_digest": "38ac3e13c54d12a1f444e794d411ab988273380216523fdd1528d12e1944dc32",
+      "audit_entry_hash": "59eb32aecb0dbfb143198bfef6afc85da8cbd684dc9ba4e88f235c5c212292ea",
+      "passed": true
+    },
+    {
+      "step_id": "REF-05",
+      "description": "Altered amount (+1 cent) against signed approval must be denied",
+      "expected_decision": "DENY",
+      "observed_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "observed_reason_code": "ERR_APPROVAL_PAYLOAD_MISMATCH",
+      "expected_remaining_minor": 65000,
+      "observed_remaining_minor": 65000,
+      "action_digest": "7f373c646d09a5e2a7369354794da3c432b1a60f7644e87ec370cc28a24d3cae",
+      "audit_entry_hash": "257dcf986d0be84f31dc0fa21e7dbec2ef66d58fd5481210d477243e50899e74",
+      "passed": true
+    },
+    {
+      "step_id": "REF-06",
+      "description": "Audience mismatch (mock-settlement-engine not in grant aud)",
+      "expected_decision": "DENY",
+      "observed_decision": "DENY",
+      "expected_reason_code": "ERR_AUDIENCE_MISMATCH",
+      "observed_reason_code": "ERR_AUDIENCE_MISMATCH",
+      "expected_remaining_minor": 65000,
+      "observed_remaining_minor": 65000,
+      "action_digest": "b989ff70fd24bbfd7cad47ea82e876d2c9d9075e0db12c183dd08fe03f128a42",
+      "audit_entry_hash": "3bbcb86dc1f1ba2666787b96a56edcb14e55af1ff0ea77b20040d025e99f12e5",
+      "passed": true
+    },
+    {
+      "step_id": "REF-07",
+      "description": "Attenuated sub-delegated grant executes $50.00 (5000 minor) payment; debits both sub and root grants",
+      "expected_decision": "ALLOW",
+      "observed_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED",
+      "observed_reason_code": "ALLOW_AUTHORIZED",
+      "expected_remaining_minor": 35000,
+      "observed_remaining_minor": 35000,
+      "action_digest": "77abec5a350c3f29fa2b54eb12d7529666de6f49be71291d3eef8968d07514aa",
+      "audit_entry_hash": "e19d78e9303ab4b4508605ac93fd5fb4a0e412d04badbfdeae065ec72a5694fb",
+      "passed": true
+    },
+    {
+      "step_id": "REF-08",
+      "description": "Sub-grant attempts out-of-scope resource mock-acct-1002 (only mock-acct-1001 allowed)",
+      "expected_decision": "DENY",
+      "observed_decision": "DENY",
+      "expected_reason_code": "ERR_SCOPE_DENIED",
+      "observed_reason_code": "ERR_SCOPE_DENIED",
+      "expected_remaining_minor": 35000,
+      "observed_remaining_minor": 35000,
+      "action_digest": "e9f0ccef6bbd612f9bc93b7223738c0e35dc7069ea359e0d6bfb63ff6839c4f8",
+      "audit_entry_hash": "fa459935353a6bed2cf7eec3f0a2b0b7777e705285d9d016d7d011af09e171d3",
+      "passed": true
+    },
+    {
+      "step_id": "REF-09",
+      "description": "Advance clock past sub-grant expiry (t+200s \u003e 180s TTL); expired grant must be denied",
+      "expected_decision": "DENY",
+      "observed_decision": "DENY",
+      "expected_reason_code": "ERR_GRANT_EXPIRED",
+      "observed_reason_code": "ERR_GRANT_EXPIRED",
+      "expected_remaining_minor": 0,
+      "observed_remaining_minor": 0,
+      "action_digest": "bdc790788461a2883225b91dab3ef9f54f9f012915e05ff0f0367a847bd6ced6",
+      "audit_entry_hash": "2e53817d6047eab9df40c0ad14a032a471ae6dec9f8c70c79ee7d3ed2e264058",
+      "passed": true
+    }
+  ],
+  "metrics": {
+    "grants_issued": 1,
+    "sub_grants_issued": 1,
+    "revocations_recorded": 0,
+    "approvals_consumed": 1,
+    "total_authorizations": 9,
+    "allow_count": 3,
+    "deny_count": 6,
+    "denies_by_reason": {
+      "ERR_APPROVAL_ALREADY_USED": 1,
+      "ERR_APPROVAL_PAYLOAD_MISMATCH": 1,
+      "ERR_APPROVAL_REQUIRED": 1,
+      "ERR_AUDIENCE_MISMATCH": 1,
+      "ERR_GRANT_EXPIRED": 1,
+      "ERR_SCOPE_DENIED": 1
+    }
+  },
+  "replay": {
+    "total_events": 11,
+    "verified_decisions": 9,
+    "chain_valid": true,
+    "passed": true,
+    "mismatches": []
+  },
+  "passed": true
+}

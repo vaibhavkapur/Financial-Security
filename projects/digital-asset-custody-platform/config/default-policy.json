@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "policy_version": "policy-v1.0.0",
+  "environment": "offline-mock-testnet",
+  "allowed_networks": [
+    "mock-eth-sepolia",
+    "mock-btc-testnet"
+  ],
+  "confirmation_depth": 2,
+  "vaults": {
+    "vault-treasury-01": {
+      "vault_id": "vault-treasury-01",
+      "network": "mock-eth-sepolia",
+      "source_address": "0x1111111111111111111111111111111111111111",
+      "active": true,
+      "signing_threshold": 2,
+      "signer_ids": [
+        "signer-hsm-sim-1",
+        "signer-hsm-sim-2",
+        "signer-hsm-sim-3"
+      ],
+      "assets": {
+        "MOCK_ETH": {
+          "unit": "gwei",
+          "decimals": 9,
+          "max_single_transfer": 5000000000,
+          "daily_limit": 10000000000,
+          "high_value_threshold": 2000000000,
+          "standard_approval_quorum": 2,
+          "high_value_approval_quorum": 3
+        },
+        "MOCK_USDC": {
+          "unit": "micro_usdc",
+          "decimals": 6,
+          "max_single_transfer": 50000000000,
+          "daily_limit": 100000000000,
+          "high_value_threshold": 25000000000,
+          "standard_approval_quorum": 2,
+          "high_value_approval_quorum": 3
+        }
+      },
+      "destination_allowlist": [
+        {
+          "address": "0x2222222222222222222222222222222222222222",
+          "label": "testnet-settlement-counterparty-a",
+          "max_single_transfer": 5000000000
+        },
+        {
+          "address": "0x3333333333333333333333333333333333333333",
+          "label": "testnet-cold-sweep-vault",
+          "max_single_transfer": 50000000000
+        }
+      ]
+    }
+  },
+  "approvers": [
+    {
+      "id": "approver-ops-1",
+      "role": "treasury_operations",
+      "active": true
+    },
+    {
+      "id": "approver-risk-2",
+      "role": "risk_officer",
+      "active": true
+    },
+    {
+      "id": "approver-sec-3",
+      "role": "security_officer",
+      "active": true
+    }
+  ],
+  "requesters": [
+    {
+      "id": "requester-treasury-bot",
+      "role": "transfer_initiator",
+      "active": true
+    },
+    {
+      "id": "approver-ops-1",
+      "role": "treasury_operations",
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "fixture_version": "1.0.0",
+  "deterministic_seed": "CUSTODY-SCENARIOS-SEED-2026-0001",
+  "base_time": "2026-01-15T12:00:00Z",
+  "scenarios": [
+    {
+      "id": "scenario-reference",
+      "category": "baseline",
+      "description": "Standard 2-of-3 approval, 2-of-3 Ed25519 multisig signing, 2-block confirmation, and reconciliation."
+    },
+    {
+      "id": "scenario-tampered-destination",
+      "category": "domain_correctness",
+      "description": "Approved intent has destination address mutated prior to isolated signer verification; signer must refuse with ERR_INTENT_HASH_MISMATCH."
+    },
+    {
+      "id": "scenario-missing-quorum",
+      "category": "domain_correctness",
+      "description": "Intent with only 1 of 2 required approvals submitted to signer; signer must refuse with ERR_INSUFFICIENT_APPROVALS."
+    },
+    {
+      "id": "scenario-replay",
+      "category": "integration_resilience",
+      "description": "Duplicate intent ID, reused nonce, and replayed signed payload submitted to engine and signer; all replays blocked."
+    },
+    {
+      "id": "scenario-signer-outage",
+      "category": "integration_resilience",
+      "description": "1 of 3 signers offline still meets 2-of-3 threshold; 2 of 3 offline fails closed with ERR_SIGNER_QUORUM_UNAVAILABLE; recovery restores signing."
+    },
+    {
+      "id": "scenario-chain-reorg",
+      "category": "integration_resilience",
+      "description": "Shallow block reorg orphans a confirming/settled transfer, custody engine detects divergence, reverts settlement, re-confirms on canonical fork, and reconciles cleanly."
+    },
+    {
+      "id": "scenario-key-rotation-pending-intent",
+      "category": "boundary_failure",
+      "description": "Vault key epoch rotates from epoch 1 to epoch 2 while an approved epoch-1 intent is pending; pending intent is invalidated, stale-epoch signing is rejected with ERR_KEY_EPOCH_MISMATCH, funds are unreserved, and a new epoch-2 intent succeeds."
+    }
+  ]
+}

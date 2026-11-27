@@ -1,0 +1,997 @@
+{
+  "metadata": {
+    "run_id": "RUN-868cf7d7801e",
+    "schema_version": "1.0.0",
+    "environment": "synthetic-trading-lab",
+    "deterministic_seed": 2026065,
+    "containment_mode": "simulation_only",
+    "live_containment": false,
+    "go_version": "go1.27.1",
+    "os": "darwin",
+    "arch": "arm64",
+    "input_path": "data/fixtures/scenarios/synthetic_eval_dataset.jsonl",
+    "input_sha256": "777bfd2602e03f61f9253c6bf38fa9be2419504a07f7f91b681e1057bc0b9cd4"
+  },
+  "metrics": {
+    "events_ingested": 22,
+    "events_normalized": 21,
+    "events_deduplicated": 1,
+    "events_invalid": 0,
+    "fields_redacted": 2,
+    "telemetry_gaps_detected": 0,
+    "alerts_total": 8,
+    "alerts_active": 8,
+    "alerts_suppressed": 0,
+    "cases_created": 4,
+    "proposals_created": 7
+  },
+  "telemetry_gaps": [],
+  "validation_errors": [],
+  "alerts": [
+    {
+      "alert_id": "ALT-bf1abb1d2612",
+      "rule_id": "TISM-SIGMA-003",
+      "rule_title": "Abnormal Authentication Access to Trading Infrastructure",
+      "category": "auth_log",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:03:00Z",
+      "actor": "dev-compromised",
+      "service": "risk-engine",
+      "host": "trd-rsk-01",
+      "summary": "Abnormal Authentication Access to Trading Infrastructure by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+      "source_event_ids": [
+        "eval-005"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "login",
+        "event_type": "auth_log",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-atk-a",
+        "source_ip": "203.0.113.77"
+      },
+      "tags": [
+        "attack.initial_access",
+        "trading.access_control"
+      ]
+    },
+    {
+      "alert_id": "ALT-3f344fe83b5c",
+      "rule_id": "TISM-SIGMA-002",
+      "rule_title": "Unexpected Privilege Escalation or Role Grant",
+      "category": "auth_log",
+      "severity": "critical",
+      "occurred_at": "2026-06-01T10:03:20Z",
+      "actor": "dev-compromised",
+      "service": "risk-engine",
+      "host": "trd-rsk-01",
+      "summary": "Unexpected Privilege Escalation or Role Grant by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+      "source_event_ids": [
+        "eval-006"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "role_grant",
+        "event_type": "auth_log",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-atk-a",
+        "source_ip": "203.0.113.77",
+        "target_role": "risk-override"
+      },
+      "tags": [
+        "attack.privilege_escalation",
+        "trading.iam"
+      ]
+    },
+    {
+      "alert_id": "ALT-65793e0e83ba",
+      "rule_id": "TISM-SIGMA-001",
+      "rule_title": "Unexpected Direct Configuration Edit on Protected Trading Service",
+      "category": "config_diff",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:03:40Z",
+      "actor": "dev-compromised",
+      "service": "risk-engine",
+      "host": "trd-rsk-01",
+      "summary": "Unexpected Direct Configuration Edit on Protected Trading Service by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+      "source_event_ids": [
+        "eval-007"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "config_edit",
+        "config_path": "/etc/trading/risk-engine/limits.yaml",
+        "event_type": "config_diff",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-atk-a",
+        "source_ip": "203.0.113.77"
+      },
+      "tags": [
+        "attack.defense_evasion",
+        "trading.config_integrity"
+      ]
+    },
+    {
+      "alert_id": "ALT-f677ee6e1bcc",
+      "rule_id": "TISM-SIGMA-004",
+      "rule_title": "Trading Risk Limit Override or Kill-Switch Tampering",
+      "category": "order_audit",
+      "severity": "critical",
+      "occurred_at": "2026-06-01T10:04:00Z",
+      "actor": "dev-compromised",
+      "service": "risk-engine",
+      "host": "trd-rsk-01",
+      "summary": "Trading Risk Limit Override or Kill-Switch Tampering by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+      "source_event_ids": [
+        "eval-008"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "risk_limit_override",
+        "event_type": "order_audit",
+        "order_id": "SIM-ORD-9001",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-atk-a",
+        "source_ip": "203.0.113.77"
+      },
+      "tags": [
+        "attack.impact",
+        "trading.risk_controls"
+      ]
+    },
+    {
+      "alert_id": "ALT-f8f0cd62b33d",
+      "rule_id": "TISM-SIGMA-003",
+      "rule_title": "Abnormal Authentication Access to Trading Infrastructure",
+      "category": "auth_log",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:04:30Z",
+      "actor": "svc-market-data",
+      "service": "matching-gateway",
+      "host": "trd-mch-02",
+      "summary": "Abnormal Authentication Access to Trading Infrastructure by actor svc-market-data on matching-gateway (deny: missing change_ticket)",
+      "source_event_ids": [
+        "eval-009"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "login",
+        "event_type": "auth_log",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-atk-b",
+        "source_ip": "10.20.4.12"
+      },
+      "tags": [
+        "attack.initial_access",
+        "trading.access_control"
+      ]
+    },
+    {
+      "alert_id": "ALT-7fc24de8b0d1",
+      "rule_id": "TISM-SIGMA-005",
+      "rule_title": "Unauthorized or Unverified Trading Service Deployment",
+      "category": "deployment_audit",
+      "severity": "critical",
+      "occurred_at": "2026-06-01T10:05:00Z",
+      "actor": "svc-market-data",
+      "service": "matching-gateway",
+      "host": "trd-mch-02",
+      "summary": "Unauthorized or Unverified Trading Service Deployment by actor svc-market-data on matching-gateway (deny: missing change_ticket)",
+      "source_event_ids": [
+        "eval-010"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "binary_swap",
+        "artifact_sha256": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+        "event_type": "deployment_audit",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-atk-b",
+        "source_ip": "10.20.4.12"
+      },
+      "tags": [
+        "attack.persistence",
+        "trading.supply_chain"
+      ]
+    },
+    {
+      "alert_id": "ALT-399601663bba",
+      "rule_id": "TISM-STATE-001",
+      "rule_title": "Authentication Brute-Force Failure Burst",
+      "category": "auth_log",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:06:30Z",
+      "actor": "ext-scanner",
+      "service": "order-router",
+      "host": "trd-ord-02",
+      "summary": "4 failed logins for actor ext-scanner within 300s",
+      "source_event_ids": [
+        "eval-011",
+        "eval-012",
+        "eval-013",
+        "eval-014"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "failure_count": "4",
+        "source_ip": "198.51.100.88",
+        "window_seconds": "300"
+      },
+      "tags": [
+        "attack.credential_access",
+        "trading.auth_burst"
+      ]
+    },
+    {
+      "alert_id": "ALT-db30f759f4a6",
+      "rule_id": "TISM-STATE-002",
+      "rule_title": "Anomalous Order Submission Velocity Burst",
+      "category": "order_audit",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:06:56Z",
+      "actor": "algo-bot-rogue",
+      "service": "order-router",
+      "host": "trd-ord-03",
+      "summary": "5 order submissions by algo-bot-rogue on order-router within 60s",
+      "source_event_ids": [
+        "eval-015",
+        "eval-016",
+        "eval-017",
+        "eval-018",
+        "eval-019"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "order_count": "5",
+        "window_seconds": "60"
+      },
+      "tags": [
+        "attack.impact",
+        "trading.order_velocity"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "CASE-5f43c60638c8",
+      "title": "[CRITICAL] 4 correlated alert(s) involving dev-compromised on risk-engine",
+      "severity": "critical",
+      "status": "open",
+      "first_seen": "2026-06-01T10:03:00Z",
+      "last_seen": "2026-06-01T10:04:00Z",
+      "primary_actor": "dev-compromised",
+      "affected_services": [
+        "risk-engine"
+      ],
+      "affected_hosts": [
+        "trd-rsk-01"
+      ],
+      "alert_ids": [
+        "ALT-3f344fe83b5c",
+        "ALT-65793e0e83ba",
+        "ALT-bf1abb1d2612",
+        "ALT-f677ee6e1bcc"
+      ],
+      "source_event_ids": [
+        "eval-005",
+        "eval-006",
+        "eval-007",
+        "eval-008"
+      ],
+      "correlation_reasons": [
+        "shared_actor:dev-compromised"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:03:00Z",
+          "alert_id": "ALT-bf1abb1d2612",
+          "rule_id": "TISM-SIGMA-003",
+          "severity": "high",
+          "summary": "Abnormal Authentication Access to Trading Infrastructure by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+          "source_event_ids": [
+            "eval-005"
+          ]
+        },
+        {
+          "timestamp": "2026-06-01T10:03:20Z",
+          "alert_id": "ALT-3f344fe83b5c",
+          "rule_id": "TISM-SIGMA-002",
+          "severity": "critical",
+          "summary": "Unexpected Privilege Escalation or Role Grant by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+          "source_event_ids": [
+            "eval-006"
+          ]
+        },
+        {
+          "timestamp": "2026-06-01T10:03:40Z",
+          "alert_id": "ALT-65793e0e83ba",
+          "rule_id": "TISM-SIGMA-001",
+          "severity": "high",
+          "summary": "Unexpected Direct Configuration Edit on Protected Trading Service by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+          "source_event_ids": [
+            "eval-007"
+          ]
+        },
+        {
+          "timestamp": "2026-06-01T10:04:00Z",
+          "alert_id": "ALT-f677ee6e1bcc",
+          "rule_id": "TISM-SIGMA-004",
+          "severity": "critical",
+          "summary": "Trading Risk Limit Override or Kill-Switch Tampering by actor dev-compromised on risk-engine (deny: missing change_ticket)",
+          "source_event_ids": [
+            "eval-008"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_freeze_trading_credentials",
+        "simulate_revert_config_diff",
+        "simulate_revoke_session"
+      ]
+    },
+    {
+      "case_id": "CASE-f09b6f6ed66f",
+      "title": "[CRITICAL] 2 correlated alert(s) involving svc-market-data on matching-gateway",
+      "severity": "critical",
+      "status": "open",
+      "first_seen": "2026-06-01T10:04:30Z",
+      "last_seen": "2026-06-01T10:05:00Z",
+      "primary_actor": "svc-market-data",
+      "affected_services": [
+        "matching-gateway"
+      ],
+      "affected_hosts": [
+        "trd-mch-02"
+      ],
+      "alert_ids": [
+        "ALT-7fc24de8b0d1",
+        "ALT-f8f0cd62b33d"
+      ],
+      "source_event_ids": [
+        "eval-009",
+        "eval-010"
+      ],
+      "correlation_reasons": [
+        "shared_actor:svc-market-data"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:04:30Z",
+          "alert_id": "ALT-f8f0cd62b33d",
+          "rule_id": "TISM-SIGMA-003",
+          "severity": "high",
+          "summary": "Abnormal Authentication Access to Trading Infrastructure by actor svc-market-data on matching-gateway (deny: missing change_ticket)",
+          "source_event_ids": [
+            "eval-009"
+          ]
+        },
+        {
+          "timestamp": "2026-06-01T10:05:00Z",
+          "alert_id": "ALT-7fc24de8b0d1",
+          "rule_id": "TISM-SIGMA-005",
+          "severity": "critical",
+          "summary": "Unauthorized or Unverified Trading Service Deployment by actor svc-market-data on matching-gateway (deny: missing change_ticket)",
+          "source_event_ids": [
+            "eval-010"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_quarantine_host",
+        "simulate_revoke_session"
+      ]
+    },
+    {
+      "case_id": "CASE-7e40577c6c79",
+      "title": "[HIGH] 1 correlated alert(s) involving ext-scanner on order-router",
+      "severity": "high",
+      "status": "open",
+      "first_seen": "2026-06-01T10:06:30Z",
+      "last_seen": "2026-06-01T10:06:30Z",
+      "primary_actor": "ext-scanner",
+      "affected_services": [
+        "order-router"
+      ],
+      "affected_hosts": [
+        "trd-ord-02"
+      ],
+      "alert_ids": [
+        "ALT-399601663bba"
+      ],
+      "source_event_ids": [
+        "eval-011",
+        "eval-012",
+        "eval-013",
+        "eval-014"
+      ],
+      "correlation_reasons": [
+        "single_alert_case"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:06:30Z",
+          "alert_id": "ALT-399601663bba",
+          "rule_id": "TISM-STATE-001",
+          "severity": "high",
+          "summary": "4 failed logins for actor ext-scanner within 300s",
+          "source_event_ids": [
+            "eval-011",
+            "eval-012",
+            "eval-013",
+            "eval-014"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_revoke_session"
+      ]
+    },
+    {
+      "case_id": "CASE-0f660a350a8e",
+      "title": "[HIGH] 1 correlated alert(s) involving algo-bot-rogue on order-router",
+      "severity": "high",
+      "status": "open",
+      "first_seen": "2026-06-01T10:06:56Z",
+      "last_seen": "2026-06-01T10:06:56Z",
+      "primary_actor": "algo-bot-rogue",
+      "affected_services": [
+        "order-router"
+      ],
+      "affected_hosts": [
+        "trd-ord-03"
+      ],
+      "alert_ids": [
+        "ALT-db30f759f4a6"
+      ],
+      "source_event_ids": [
+        "eval-015",
+        "eval-016",
+        "eval-017",
+        "eval-018",
+        "eval-019"
+      ],
+      "correlation_reasons": [
+        "single_alert_case"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:06:56Z",
+          "alert_id": "ALT-db30f759f4a6",
+          "rule_id": "TISM-STATE-002",
+          "severity": "high",
+          "summary": "5 order submissions by algo-bot-rogue on order-router within 60s",
+          "source_event_ids": [
+            "eval-015",
+            "eval-016",
+            "eval-017",
+            "eval-018",
+            "eval-019"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_freeze_trading_credentials"
+      ]
+    }
+  ],
+  "containment_proposals": [
+    {
+      "proposal_id": "PROP-2332cb92a1ec",
+      "case_id": "CASE-5f43c60638c8",
+      "action_type": "simulate_revoke_session",
+      "target": "actor:dev-compromised",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "critical",
+      "requested_by": "tism-correlator",
+      "required_approvals": 2,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        },
+        {
+          "reviewer": "sec-reviewer-bob",
+          "decision": "approve",
+          "rationale": "Dual-control approval for critical severity dry-run simulation",
+          "timestamp": "2026-06-01T12:06:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:risk-engine",
+        "simulated_host_scope:trd-rsk-01",
+        "action:simulate_revoke_session"
+      ],
+      "rollback_plan": "Simulation rollback: restore synthetic session state for actor:dev-compromised via IAM fixture snapshot",
+      "simulated_diff": {
+        "action": "simulate_revoke_session",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "actor:dev-compromised"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    },
+    {
+      "proposal_id": "PROP-388d8d6e3e07",
+      "case_id": "CASE-5f43c60638c8",
+      "action_type": "simulate_freeze_trading_credentials",
+      "target": "actor:dev-compromised",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "critical",
+      "requested_by": "tism-correlator",
+      "required_approvals": 2,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        },
+        {
+          "reviewer": "sec-reviewer-bob",
+          "decision": "approve",
+          "rationale": "Dual-control approval for critical severity dry-run simulation",
+          "timestamp": "2026-06-01T12:06:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:risk-engine",
+        "simulated_host_scope:trd-rsk-01",
+        "action:simulate_freeze_trading_credentials"
+      ],
+      "rollback_plan": "Simulation rollback: issue fresh synthetic trading credentials for actor:dev-compromised after dual-control sign-off",
+      "simulated_diff": {
+        "action": "simulate_freeze_trading_credentials",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "actor:dev-compromised"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    },
+    {
+      "proposal_id": "PROP-441729539dc9",
+      "case_id": "CASE-f09b6f6ed66f",
+      "action_type": "simulate_revoke_session",
+      "target": "actor:svc-market-data",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "critical",
+      "requested_by": "tism-correlator",
+      "required_approvals": 2,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        },
+        {
+          "reviewer": "sec-reviewer-bob",
+          "decision": "approve",
+          "rationale": "Dual-control approval for critical severity dry-run simulation",
+          "timestamp": "2026-06-01T12:06:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:matching-gateway",
+        "simulated_host_scope:trd-mch-02",
+        "action:simulate_revoke_session"
+      ],
+      "rollback_plan": "Simulation rollback: restore synthetic session state for actor:svc-market-data via IAM fixture snapshot",
+      "simulated_diff": {
+        "action": "simulate_revoke_session",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "actor:svc-market-data"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    },
+    {
+      "proposal_id": "PROP-8b8a8147cd87",
+      "case_id": "CASE-7e40577c6c79",
+      "action_type": "simulate_revoke_session",
+      "target": "actor:ext-scanner",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "high",
+      "requested_by": "tism-correlator",
+      "required_approvals": 1,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:order-router",
+        "simulated_host_scope:trd-ord-02",
+        "action:simulate_revoke_session"
+      ],
+      "rollback_plan": "Simulation rollback: restore synthetic session state for actor:ext-scanner via IAM fixture snapshot",
+      "simulated_diff": {
+        "action": "simulate_revoke_session",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "actor:ext-scanner"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    },
+    {
+      "proposal_id": "PROP-bce32aba90ce",
+      "case_id": "CASE-f09b6f6ed66f",
+      "action_type": "simulate_quarantine_host",
+      "target": "host:trd-mch-02",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "critical",
+      "requested_by": "tism-correlator",
+      "required_approvals": 2,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        },
+        {
+          "reviewer": "sec-reviewer-bob",
+          "decision": "approve",
+          "rationale": "Dual-control approval for critical severity dry-run simulation",
+          "timestamp": "2026-06-01T12:06:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:matching-gateway",
+        "simulated_host_scope:trd-mch-02",
+        "action:simulate_quarantine_host"
+      ],
+      "rollback_plan": "Simulation rollback: remove simulated network quarantine ACL on host:trd-mch-02 after forensic capture",
+      "simulated_diff": {
+        "action": "simulate_quarantine_host",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "host:trd-mch-02"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    },
+    {
+      "proposal_id": "PROP-d14ad362e2e5",
+      "case_id": "CASE-0f660a350a8e",
+      "action_type": "simulate_freeze_trading_credentials",
+      "target": "actor:algo-bot-rogue",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "high",
+      "requested_by": "tism-correlator",
+      "required_approvals": 1,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:order-router",
+        "simulated_host_scope:trd-ord-03",
+        "action:simulate_freeze_trading_credentials"
+      ],
+      "rollback_plan": "Simulation rollback: issue fresh synthetic trading credentials for actor:algo-bot-rogue after dual-control sign-off",
+      "simulated_diff": {
+        "action": "simulate_freeze_trading_credentials",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "actor:algo-bot-rogue"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    },
+    {
+      "proposal_id": "PROP-d3c81bf2f84e",
+      "case_id": "CASE-5f43c60638c8",
+      "action_type": "simulate_revert_config_diff",
+      "target": "service:risk-engine",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "critical",
+      "requested_by": "tism-correlator",
+      "required_approvals": 2,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        },
+        {
+          "reviewer": "sec-reviewer-bob",
+          "decision": "approve",
+          "rationale": "Dual-control approval for critical severity dry-run simulation",
+          "timestamp": "2026-06-01T12:06:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:risk-engine",
+        "simulated_host_scope:trd-rsk-01",
+        "action:simulate_revert_config_diff"
+      ],
+      "rollback_plan": "Simulation rollback: re-apply last signed baseline config manifest for service:risk-engine",
+      "simulated_diff": {
+        "action": "simulate_revert_config_diff",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "service:risk-engine"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    }
+  ],
+  "reviewer_audit_log": [
+    {
+      "sequence_num": 1,
+      "record_id": "AUD-b9c2dcf3f8d4",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-2332cb92a1ec",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "af1dd437cc6ebfec50c8b522745c04d383dc608a5fb71e1119b75d9359637aaf"
+    },
+    {
+      "sequence_num": 2,
+      "record_id": "AUD-71e3f1eca379",
+      "timestamp": "2026-06-01T12:06:00Z",
+      "reviewer": "sec-reviewer-bob",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-2332cb92a1ec",
+      "decision": "approve",
+      "rationale": "Dual-control approval for critical severity dry-run simulation",
+      "prev_hash": "af1dd437cc6ebfec50c8b522745c04d383dc608a5fb71e1119b75d9359637aaf",
+      "record_hash": "a04ea8e7fe10974139aa2493f27609628e9216fdb59371946575266f21751f8a"
+    },
+    {
+      "sequence_num": 3,
+      "record_id": "AUD-5ee54cd565a2",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-2332cb92a1ec",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "a04ea8e7fe10974139aa2493f27609628e9216fdb59371946575266f21751f8a",
+      "record_hash": "f1793a74f3f7b3a63d85e9e5965709001e44d1aedc25d1e1efd0949a42bc01ee"
+    },
+    {
+      "sequence_num": 4,
+      "record_id": "AUD-8db7b5d7a955",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-388d8d6e3e07",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "f1793a74f3f7b3a63d85e9e5965709001e44d1aedc25d1e1efd0949a42bc01ee",
+      "record_hash": "007e8b33d9af6af52a1f375e5567b3a8bea0250053095a3f74928b755c7aea6e"
+    },
+    {
+      "sequence_num": 5,
+      "record_id": "AUD-31021f30e6c6",
+      "timestamp": "2026-06-01T12:06:00Z",
+      "reviewer": "sec-reviewer-bob",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-388d8d6e3e07",
+      "decision": "approve",
+      "rationale": "Dual-control approval for critical severity dry-run simulation",
+      "prev_hash": "007e8b33d9af6af52a1f375e5567b3a8bea0250053095a3f74928b755c7aea6e",
+      "record_hash": "e7da891fb7f183d493652dec8e4b3e8d39acf929e4c7067a96562eb69b2ebc61"
+    },
+    {
+      "sequence_num": 6,
+      "record_id": "AUD-d796a87d8193",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-388d8d6e3e07",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "e7da891fb7f183d493652dec8e4b3e8d39acf929e4c7067a96562eb69b2ebc61",
+      "record_hash": "d1abba9b80d95730a3078ed752e840f9ce241dfb4be05c0ccb54c1f635505b31"
+    },
+    {
+      "sequence_num": 7,
+      "record_id": "AUD-d3b4bd4b716c",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-441729539dc9",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "d1abba9b80d95730a3078ed752e840f9ce241dfb4be05c0ccb54c1f635505b31",
+      "record_hash": "19f873465802aca22872b819cd0775d6912303e8f3781ec7e06cd72dad264942"
+    },
+    {
+      "sequence_num": 8,
+      "record_id": "AUD-5e6145f0366d",
+      "timestamp": "2026-06-01T12:06:00Z",
+      "reviewer": "sec-reviewer-bob",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-441729539dc9",
+      "decision": "approve",
+      "rationale": "Dual-control approval for critical severity dry-run simulation",
+      "prev_hash": "19f873465802aca22872b819cd0775d6912303e8f3781ec7e06cd72dad264942",
+      "record_hash": "94f30595e1142555de0f3f9edb01df5ac0c58e2e7afc852f5a49bf7d53378413"
+    },
+    {
+      "sequence_num": 9,
+      "record_id": "AUD-b3340fed771a",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-441729539dc9",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "94f30595e1142555de0f3f9edb01df5ac0c58e2e7afc852f5a49bf7d53378413",
+      "record_hash": "860c8143ccd2498663b64a5fad9b3684cc8407636d63b9db0cf660e10b2f52b5"
+    },
+    {
+      "sequence_num": 10,
+      "record_id": "AUD-3660233a64c7",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-8b8a8147cd87",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "860c8143ccd2498663b64a5fad9b3684cc8407636d63b9db0cf660e10b2f52b5",
+      "record_hash": "bc9057d93bb9260ad744ee7abf9bebeb08ab999d418a8ddd4e958dba9af81eff"
+    },
+    {
+      "sequence_num": 11,
+      "record_id": "AUD-713db3deb7af",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-8b8a8147cd87",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "bc9057d93bb9260ad744ee7abf9bebeb08ab999d418a8ddd4e958dba9af81eff",
+      "record_hash": "7fedb948f5989c1fe1707ac431b82a6514e6a59e27433ef8b1630429933e420e"
+    },
+    {
+      "sequence_num": 12,
+      "record_id": "AUD-bc10fd625fc6",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-bce32aba90ce",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "7fedb948f5989c1fe1707ac431b82a6514e6a59e27433ef8b1630429933e420e",
+      "record_hash": "6eca2a2f09f0fe3d695496475b14505eb65714ef505560135eee1c2e17a25b18"
+    },
+    {
+      "sequence_num": 13,
+      "record_id": "AUD-0702cacfc08b",
+      "timestamp": "2026-06-01T12:06:00Z",
+      "reviewer": "sec-reviewer-bob",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-bce32aba90ce",
+      "decision": "approve",
+      "rationale": "Dual-control approval for critical severity dry-run simulation",
+      "prev_hash": "6eca2a2f09f0fe3d695496475b14505eb65714ef505560135eee1c2e17a25b18",
+      "record_hash": "29666f744b4c64ba23d5539895f4edcf65dab3e9a3c2371aaaeaf12eb78de3cf"
+    },
+    {
+      "sequence_num": 14,
+      "record_id": "AUD-138da01f456c",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-bce32aba90ce",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "29666f744b4c64ba23d5539895f4edcf65dab3e9a3c2371aaaeaf12eb78de3cf",
+      "record_hash": "19fbdbef173469d8dda51facbce62ac745dfb66cc96e1e75b3607efcafa1217f"
+    },
+    {
+      "sequence_num": 15,
+      "record_id": "AUD-c45b93b32855",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-d14ad362e2e5",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "19fbdbef173469d8dda51facbce62ac745dfb66cc96e1e75b3607efcafa1217f",
+      "record_hash": "496c2e2fbf659b8fd90e242cd616176dae07596c16ac6697298886f04b266be4"
+    },
+    {
+      "sequence_num": 16,
+      "record_id": "AUD-3b0b2b50e9ae",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-d14ad362e2e5",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "496c2e2fbf659b8fd90e242cd616176dae07596c16ac6697298886f04b266be4",
+      "record_hash": "14278e5207fd9565a5f7b18c5f15c244707b20ac9b96b94afd533b0470fb8efd"
+    },
+    {
+      "sequence_num": 17,
+      "record_id": "AUD-26bc61549fa6",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-d3c81bf2f84e",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "14278e5207fd9565a5f7b18c5f15c244707b20ac9b96b94afd533b0470fb8efd",
+      "record_hash": "566df480fe40e657b2cf16e2b30f7a018fea15e0458775e5b45e6bd23eb8a47c"
+    },
+    {
+      "sequence_num": 18,
+      "record_id": "AUD-ac407127ce6f",
+      "timestamp": "2026-06-01T12:06:00Z",
+      "reviewer": "sec-reviewer-bob",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-d3c81bf2f84e",
+      "decision": "approve",
+      "rationale": "Dual-control approval for critical severity dry-run simulation",
+      "prev_hash": "566df480fe40e657b2cf16e2b30f7a018fea15e0458775e5b45e6bd23eb8a47c",
+      "record_hash": "91362ebd754ac3653572324497ddd8875cd2a085df8f2c5378fbad1672417a80"
+    },
+    {
+      "sequence_num": 19,
+      "record_id": "AUD-3cc7de29acc1",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-d3c81bf2f84e",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "91362ebd754ac3653572324497ddd8875cd2a085df8f2c5378fbad1672417a80",
+      "record_hash": "c78bdcd6e8cfed375524f4b52fd1c72a2ff494baa8e153c871844097c21fd872"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "run_id": "RUN-868cf7d7801e",
+    "schema_version": "1.0.0",
+    "environment": "synthetic-trading-lab",
+    "deterministic_seed": 2026065,
+    "containment_mode": "simulation_only",
+    "live_containment": false,
+    "go_version": "go1.27.1",
+    "os": "darwin",
+    "arch": "arm64",
+    "input_path": "data/fixtures/scenarios/synthetic_eval_dataset.jsonl",
+    "input_sha256": "777bfd2602e03f61f9253c6bf38fa9be2419504a07f7f91b681e1057bc0b9cd4"
+  },
+  "expected_alert_count": 8,
+  "observed_active_alerts": 8,
+  "suppressed_alerts": 0,
+  "true_positives": 8,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "recall": 1,
+  "precision": 1,
+  "f1_score": 1,
+  "all_alerts_traced": true,
+  "live_containment_count": 0,
+  "expected_case_count": 4,
+  "observed_case_count": 4,
+  "missing_expected_alerts": [],
+  "unexpected_alerts": []
+}

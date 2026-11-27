@@ -1,0 +1,9 @@
+goos: darwin
+goarch: arm64
+pkg: github.com/financial-security/agent-identity-and-authorization-platform/tests
+cpu: Apple M5
+BenchmarkGrantSignAndVerify-10      	   26433	     43952 ns/op	   11045 B/op	      91 allocs/op
+BenchmarkAuthorizeEndToEnd-10       	   10000	    110839 ns/op	   25747 B/op	     391 allocs/op
+BenchmarkAuditReplay100Events-10    	    2284	    522501 ns/op	  534551 B/op	    4580 allocs/op
+PASS
+ok  	github.com/financial-security/agent-identity-and-authorization-platform/tests	4.293s

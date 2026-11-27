@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "resource": {
+    "deployment.environment": "synthetic-trading-lab",
+    "service.name": "trading-infrastructure-security-monitor",
+    "service.version": "1.0.0",
+    "tism.run_id": "RUN-868cf7d7801e"
+  },
+  "spans": [
+    {
+      "trace_id": "4eacdcc3096efb16a6d6f5dc17299d30",
+      "span_id": "81dfb44e83ada885",
+      "name": "pipeline.run",
+      "kind": "SPAN_KIND_INTERNAL",
+      "start_time_unix_nano": 1780315200000000000,
+      "end_time_unix_nano": 1780315200001000000,
+      "status": "OK",
+      "attributes": {
+        "containment.mode": "simulation_only",
+        "events.ingested": "22",
+        "input.path": "data/fixtures/scenarios/synthetic_eval_dataset.jsonl"
+      }
+    },
+    {
+      "trace_id": "4eacdcc3096efb16a6d6f5dc17299d30",
+      "span_id": "513c1263ac1346d4",
+      "parent_span_id": "81dfb44e83ada885",
+      "name": "pipeline.detect",
+      "kind": "SPAN_KIND_INTERNAL",
+      "start_time_unix_nano": 1780315200002000000,
+      "end_time_unix_nano": 1780315200003000000,
+      "status": "OK",
+      "attributes": {
+        "alerts.total": "8",
+        "telemetry.gaps_found": "0"
+      }
+    },
+    {
+      "trace_id": "4eacdcc3096efb16a6d6f5dc17299d30",
+      "span_id": "7ee2f70051b22f0f",
+      "parent_span_id": "81dfb44e83ada885",
+      "name": "pipeline.correlate",
+      "kind": "SPAN_KIND_INTERNAL",
+      "start_time_unix_nano": 1780315200004000000,
+      "end_time_unix_nano": 1780315200005000000,
+      "status": "OK",
+      "attributes": {
+        "cases.created": "4"
+      }
+    },
+    {
+      "trace_id": "4eacdcc3096efb16a6d6f5dc17299d30",
+      "span_id": "cd9af0948f520679",
+      "parent_span_id": "81dfb44e83ada885",
+      "name": "pipeline.propose_containment",
+      "kind": "SPAN_KIND_INTERNAL",
+      "start_time_unix_nano": 1780315200006000000,
+      "end_time_unix_nano": 1780315200007000000,
+      "status": "OK",
+      "attributes": {
+        "live.executed": "false",
+        "proposals.created": "7"
+      }
+    }
+  ],
+  "counters": {
+    "events_ingested": 22,
+    "events_normalized": 21,
+    "events_deduplicated": 1,
+    "events_invalid": 0,
+    "fields_redacted": 2,
+    "telemetry_gaps_detected": 0,
+    "alerts_total": 8,
+    "alerts_active": 8,
+    "alerts_suppressed": 0,
+    "cases_created": 4,
+    "proposals_created": 7
+  }
+}

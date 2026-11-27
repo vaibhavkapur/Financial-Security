@@ -1,0 +1,36 @@
+name: Trading Infrastructure Security Monitor CI
+
+on:
+  push:
+    paths:
+      - 'projects/trading-infrastructure-security-monitor/**'
+      - '.github/workflows/trading-infrastructure-security-monitor.yml'
+  pull_request:
+    paths:
+      - 'projects/trading-infrastructure-security-monitor/**'
+      - '.github/workflows/trading-infrastructure-security-monitor.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/trading-infrastructure-security-monitor
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: projects/trading-infrastructure-security-monitor/go.mod
+
+      - name: Run static analysis and race-enabled test suite
+        run: ./scripts/validate.sh
+
+      - name: Verify reproducible report generation
+        run: ./scripts/generate_reports.sh
+
+      - name: Run microbenchmarks
+        run: go test -run=^$ -bench=. -benchmem ./tests/...

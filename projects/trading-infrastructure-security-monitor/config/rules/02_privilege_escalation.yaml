@@ -1,0 +1,22 @@
+title: Unexpected Privilege Escalation or Role Grant
+id: TISM-SIGMA-002
+status: stable
+level: critical
+description: Detects grants of privileged trading or IAM roles without a verified change ticket or outside approved policy.
+logsource:
+  category: auth_log
+  product: trading-infrastructure
+detection:
+  selection_priv:
+    event_type: auth_log
+    action|in:
+      - role_grant
+      - privilege_escalation
+      - policy_attach
+    outcome: success
+  filter_approved:
+    attributes.change_ticket_valid: "true"
+  condition: selection_priv and not filter_approved
+tags:
+  - attack.privilege_escalation
+  - trading.iam

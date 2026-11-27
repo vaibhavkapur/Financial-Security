@@ -1,0 +1,90 @@
+{
+  "fixture_version": "1.0.0",
+  "description": "Valid, boundary, and invalid input contract test vectors.",
+  "cases": [
+    {
+      "id": "BND-01",
+      "description": "Exact approval threshold boundary (amount == require_approval_above_minor -> no approval needed)",
+      "amount_minor": 15000,
+      "currency": "USD",
+      "action_type": "payment.initiate",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "mock-cp-clearing-a",
+      "expected_decision": "ALLOW",
+      "expected_reason_code": "ALLOW_AUTHORIZED"
+    },
+    {
+      "id": "BND-02",
+      "description": "One minor unit above approval threshold (15001 > 15000 -> requires approval)",
+      "amount_minor": 15001,
+      "currency": "USD",
+      "action_type": "payment.initiate",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "mock-cp-clearing-a",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_APPROVAL_REQUIRED"
+    },
+    {
+      "id": "BND-03",
+      "description": "One minor unit above max_per_action_minor (50001 > 50000 -> per-action limit exceeded)",
+      "amount_minor": 50001,
+      "currency": "USD",
+      "action_type": "payment.initiate",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "mock-cp-clearing-a",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_PER_ACTION_LIMIT_EXCEEDED"
+    },
+    {
+      "id": "INV-01",
+      "description": "Negative amount (-100 minor units) rejected",
+      "amount_minor": -100,
+      "currency": "USD",
+      "action_type": "payment.initiate",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "mock-cp-clearing-a",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_INVALID_INPUT"
+    },
+    {
+      "id": "INV-02",
+      "description": "Unsupported action_type (wire.unrestricted) rejected",
+      "amount_minor": 1000,
+      "currency": "USD",
+      "action_type": "wire.unrestricted",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "mock-cp-clearing-a",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_UNSUPPORTED_ACTION"
+    },
+    {
+      "id": "INV-03",
+      "description": "Unsupported currency (BTC) rejected",
+      "amount_minor": 1000,
+      "currency": "BTC",
+      "action_type": "payment.initiate",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "mock-cp-clearing-a",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_UNSUPPORTED_CURRENCY"
+    },
+    {
+      "id": "INV-04",
+      "description": "Missing counterparty_id on payment.initiate rejected",
+      "amount_minor": 1000,
+      "currency": "USD",
+      "action_type": "payment.initiate",
+      "audience": "mock-treasury-api",
+      "resource_id": "mock-acct-1001",
+      "counterparty_id": "",
+      "expected_decision": "DENY",
+      "expected_reason_code": "ERR_INVALID_INPUT"
+    }
+  ]
+}

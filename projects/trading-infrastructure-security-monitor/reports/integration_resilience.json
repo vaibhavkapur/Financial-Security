@@ -1,0 +1,248 @@
+{
+  "metadata": {
+    "run_id": "RUN-91ab70dfe262",
+    "schema_version": "1.0.0",
+    "environment": "synthetic-trading-lab",
+    "deterministic_seed": 2026065,
+    "containment_mode": "simulation_only",
+    "live_containment": false,
+    "go_version": "go1.27.1",
+    "os": "darwin",
+    "arch": "arm64",
+    "input_path": "data/fixtures/scenarios/missing_telemetry_and_duplicates.jsonl",
+    "input_sha256": "e779573ebd8a1c7feb2b9279dc56a16f66ccae0267c93d035de49b2b6937173c"
+  },
+  "metrics": {
+    "events_ingested": 6,
+    "events_normalized": 4,
+    "events_deduplicated": 2,
+    "events_invalid": 0,
+    "fields_redacted": 0,
+    "telemetry_gaps_detected": 2,
+    "alerts_total": 3,
+    "alerts_active": 3,
+    "alerts_suppressed": 0,
+    "cases_created": 2,
+    "proposals_created": 1
+  },
+  "telemetry_gaps": [
+    {
+      "source": "auth_log",
+      "reason": "inter_event_silence_exceeded",
+      "gap_start": "2026-06-01T10:00:00Z",
+      "gap_end": "2026-06-01T10:12:00Z",
+      "gap_duration_seconds": 720
+    },
+    {
+      "source": "order_audit",
+      "reason": "source_completely_missing",
+      "gap_start": "2026-06-01T10:00:00Z",
+      "gap_end": "2026-06-01T10:12:00Z",
+      "gap_duration_seconds": 720
+    }
+  ],
+  "validation_errors": [],
+  "alerts": [
+    {
+      "alert_id": "ALT-7bda953cab09",
+      "rule_id": "TISM-SIGMA-001",
+      "rule_title": "Unexpected Direct Configuration Edit on Protected Trading Service",
+      "category": "config_diff",
+      "severity": "high",
+      "occurred_at": "2026-06-01T10:03:00Z",
+      "actor": "dev-unexpected",
+      "service": "risk-engine",
+      "host": "trd-rsk-01",
+      "summary": "Unexpected Direct Configuration Edit on Protected Trading Service by actor dev-unexpected on risk-engine (deny: missing change_ticket)",
+      "source_event_ids": [
+        "res-003"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "config_edit",
+        "config_path": "/etc/trading/risk-engine/limits.yaml",
+        "event_type": "config_diff",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "source_ip": "10.10.9.42"
+      },
+      "tags": [
+        "attack.defense_evasion",
+        "trading.config_integrity"
+      ]
+    },
+    {
+      "alert_id": "ALT-9a8eff8c7e82",
+      "rule_id": "TISM-HEALTH-001",
+      "rule_title": "Telemetry Stream Silence Gap Detected",
+      "category": "telemetry_health",
+      "severity": "medium",
+      "occurred_at": "2026-06-01T10:12:00Z",
+      "actor": "telemetry-monitor",
+      "service": "auth_log",
+      "host": "telemetry-pipeline",
+      "summary": "Telemetry source auth_log had a 720s silence gap exceeding 300s threshold",
+      "source_event_ids": [
+        "res-001",
+        "res-004"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "gap_duration_seconds": "720",
+        "gap_reason": "inter_event_silence_exceeded",
+        "missing_source": "auth_log",
+        "threshold_seconds": "300"
+      },
+      "tags": [
+        "telemetry.coverage",
+        "resilience.gap"
+      ]
+    },
+    {
+      "alert_id": "ALT-ab2d9a78e0de",
+      "rule_id": "TISM-HEALTH-001",
+      "rule_title": "Missing Telemetry Source Coverage",
+      "category": "telemetry_health",
+      "severity": "medium",
+      "occurred_at": "2026-06-01T10:12:00Z",
+      "actor": "telemetry-monitor",
+      "service": "order_audit",
+      "host": "telemetry-pipeline",
+      "summary": "Expected telemetry source order_audit emitted 0 events during monitoring window",
+      "source_event_ids": [
+        "res-001",
+        "res-004"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "gap_duration_seconds": "720",
+        "gap_reason": "source_completely_missing",
+        "missing_source": "order_audit"
+      },
+      "tags": [
+        "telemetry.coverage",
+        "resilience.missing_logs"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "CASE-efb5027574f9",
+      "title": "[HIGH] 1 correlated alert(s) involving dev-unexpected on risk-engine",
+      "severity": "high",
+      "status": "open",
+      "first_seen": "2026-06-01T10:03:00Z",
+      "last_seen": "2026-06-01T10:03:00Z",
+      "primary_actor": "dev-unexpected",
+      "affected_services": [
+        "risk-engine"
+      ],
+      "affected_hosts": [
+        "trd-rsk-01"
+      ],
+      "alert_ids": [
+        "ALT-7bda953cab09"
+      ],
+      "source_event_ids": [
+        "res-003"
+      ],
+      "correlation_reasons": [
+        "single_alert_case"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:03:00Z",
+          "alert_id": "ALT-7bda953cab09",
+          "rule_id": "TISM-SIGMA-001",
+          "severity": "high",
+          "summary": "Unexpected Direct Configuration Edit on Protected Trading Service by actor dev-unexpected on risk-engine (deny: missing change_ticket)",
+          "source_event_ids": [
+            "res-003"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_revert_config_diff"
+      ]
+    },
+    {
+      "case_id": "CASE-519b87cba0ce",
+      "title": "[MEDIUM] 2 correlated alert(s) involving telemetry-monitor on auth_log,order_audit",
+      "severity": "medium",
+      "status": "open",
+      "first_seen": "2026-06-01T10:12:00Z",
+      "last_seen": "2026-06-01T10:12:00Z",
+      "primary_actor": "telemetry-monitor",
+      "affected_services": [
+        "auth_log",
+        "order_audit"
+      ],
+      "affected_hosts": [
+        "telemetry-pipeline"
+      ],
+      "alert_ids": [
+        "ALT-9a8eff8c7e82",
+        "ALT-ab2d9a78e0de"
+      ],
+      "source_event_ids": [
+        "res-001",
+        "res-004"
+      ],
+      "correlation_reasons": [
+        "shared_telemetry_pipeline_window"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-01T10:12:00Z",
+          "alert_id": "ALT-9a8eff8c7e82",
+          "rule_id": "TISM-HEALTH-001",
+          "severity": "medium",
+          "summary": "Telemetry source auth_log had a 720s silence gap exceeding 300s threshold",
+          "source_event_ids": [
+            "res-001",
+            "res-004"
+          ]
+        },
+        {
+          "timestamp": "2026-06-01T10:12:00Z",
+          "alert_id": "ALT-ab2d9a78e0de",
+          "rule_id": "TISM-HEALTH-001",
+          "severity": "medium",
+          "summary": "Expected telemetry source order_audit emitted 0 events during monitoring window",
+          "source_event_ids": [
+            "res-001",
+            "res-004"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_inspect_telemetry_collector"
+      ]
+    }
+  ],
+  "containment_proposals": [
+    {
+      "proposal_id": "PROP-18ca8f73ff0e",
+      "case_id": "CASE-efb5027574f9",
+      "action_type": "simulate_revert_config_diff",
+      "target": "service:risk-engine",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "high",
+      "requested_by": "tism-correlator",
+      "required_approvals": 1,
+      "status": "pending_review",
+      "approvals": [],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:risk-engine",
+        "simulated_host_scope:trd-rsk-01",
+        "action:simulate_revert_config_diff"
+      ],
+      "rollback_plan": "Simulation rollback: re-apply last signed baseline config manifest for service:risk-engine",
+      "simulated_diff": {},
+      "created_at": "2026-06-01T12:00:00.006Z"
+    }
+  ],
+  "reviewer_audit_log": []
+}

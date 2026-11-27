@@ -1,0 +1,19 @@
+{
+  "fixture_version": "1.0.0",
+  "oracle_method": "independent_python_sha256_and_hand_accounting",
+  "expected_intent_hash": "77fed00728a365eb0a7554623e56feee1fd5cc6a90fc2e502096f2a505bff7ef",
+  "expected_policy_allowed": true,
+  "expected_required_approvals": 2,
+  "expected_required_signers": 2,
+  "expected_approval_count": 2,
+  "expected_signature_count": 2,
+  "expected_key_epoch": 1,
+  "expected_final_status": "CONFIRMED",
+  "expected_confirmations": 2,
+  "expected_vault_confirmed_balance": 8500000000,
+  "expected_vault_reserved_balance": 0,
+  "expected_vault_available_balance": 8500000000,
+  "expected_destination_onchain_balance": 1500000000,
+  "expected_reconciled": true,
+  "expected_audit_chain_valid": true
+}

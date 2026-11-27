@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "clients": [
+    {
+      "client_id": "cli-ledger-reader",
+      "role": "ledger-reader",
+      "spiffe_id": "spiffe://finsec.local/clients/cli-ledger-reader",
+      "allowed_scopes": ["accounts:read"],
+      "status": "active",
+      "description": "Read-only synthetic balance query service"
+    },
+    {
+      "client_id": "cli-order-router",
+      "role": "order-router",
+      "spiffe_id": "spiffe://finsec.local/clients/cli-order-router",
+      "allowed_scopes": ["accounts:read", "orders:read", "orders:write"],
+      "status": "active",
+      "description": "Simulated paper-trading order router"
+    },
+    {
+      "client_id": "cli-risk-auditor",
+      "role": "risk-auditor",
+      "spiffe_id": "spiffe://finsec.local/clients/cli-risk-auditor",
+      "allowed_scopes": ["accounts:read", "orders:read", "audit:read"],
+      "status": "active",
+      "description": "Read-only synthetic risk and compliance auditor"
+    },
+    {
+      "client_id": "cli-revoked-bot",
+      "role": "ledger-reader",
+      "spiffe_id": "spiffe://finsec.local/clients/cli-revoked-bot",
+      "allowed_scopes": ["accounts:read"],
+      "status": "revoked",
+      "description": "Decommissioned synthetic test client"
+    }
+  ]
+}

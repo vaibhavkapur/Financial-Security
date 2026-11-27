@@ -1,0 +1,21 @@
+title: Unauthorized or Unverified Trading Service Deployment
+id: TISM-SIGMA-005
+status: stable
+level: critical
+description: Detects deployments by non-authorized actors, with unverified artifact digests, or without an approved change ticket.
+logsource:
+  category: deployment_audit
+  product: trading-infrastructure
+detection:
+  selection_deploy:
+    event_type: deployment_audit
+    action|in:
+      - deploy_release
+      - hotfix_push
+      - binary_swap
+  filter_valid_deploy:
+    attributes.deployment_authorized: "true"
+  condition: selection_deploy and not filter_valid_deploy
+tags:
+  - attack.persistence
+  - trading.supply_chain

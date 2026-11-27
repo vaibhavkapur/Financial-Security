@@ -1,0 +1,52 @@
+name: Agent Identity and Authorization Platform CI
+
+on:
+  push:
+    paths:
+      - 'projects/agent-identity-and-authorization-platform/**'
+      - '.github/workflows/agent-identity-and-authorization-platform.yml'
+  pull_request:
+    paths:
+      - 'projects/agent-identity-and-authorization-platform/**'
+      - '.github/workflows/agent-identity-and-authorization-platform.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/agent-identity-and-authorization-platform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: projects/agent-identity-and-authorization-platform/go.mod
+
+      - name: Verify dependencies
+        run: go mod verify
+
+      - name: Vet and build
+        run: |
+          go vet ./...
+          go build ./...
+
+      - name: Run unit, integration, adversarial, and operational tests with race detector
+        run: go test -race -v -count=1 ./tests/...
+
+      - name: Verify deterministic reference fixtures
+        run: |
+          go run ./src/cmd/agent-authz verify-fixtures \
+            --config config/default.json \
+            --fixture data/fixtures/reference_scenario.json
+
+      - name: Run adversarial delegation evaluation
+        run: |
+          go run ./src/cmd/agent-authz evaluate \
+            --config config/default.json
+
+      - name: Run end-to-end demo
+        run: ./scripts/demo.sh

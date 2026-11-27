@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "ref-vectors-v1",
+  "seed": 42,
+  "fixed_clock_utc": "2026-01-15T12:00:00Z",
+  "oracle_source": "Independent Python 3 stdlib hashlib.sha256 + hmac.new (HMAC-SHA256) calculation",
+  "notes": "Synthetic local-lab fixtures only. No real credentials, accounts, or transactions.",
+  "signing_oracle_vectors": [
+    {
+      "id": "sig-vec-get-balance",
+      "client_id": "cli-ledger-reader",
+      "algorithm": "HMAC-SHA256",
+      "key_id": "hmac-ref-key-1",
+      "synthetic_secret": "test-only-synthetic-hmac-secret-v1",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "raw_query": "currency=USD",
+      "timestamp": "2026-01-15T12:00:00Z",
+      "nonce": "nonce-ref-0001",
+      "body": "",
+      "expected_body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_canonical_string": "v1\nGET\n/v1/accounts/ACC-1001/balance\ncurrency=USD\n2026-01-15T12:00:00Z\nnonce-ref-0001\nhmac-ref-key-1\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_signature_b64url": "X0adXxF_77YtgwE45KsNvN5cG1UqLn3IQeXxmUdSsz0"
+    },
+    {
+      "id": "sig-vec-post-order",
+      "client_id": "cli-order-router",
+      "algorithm": "HMAC-SHA256",
+      "key_id": "hmac-ref-key-2",
+      "synthetic_secret": "test-only-synthetic-hmac-secret-v2",
+      "method": "POST",
+      "path": "/v1/orders",
+      "raw_query": "",
+      "timestamp": "2026-01-15T12:00:00Z",
+      "nonce": "nonce-ref-0002",
+      "body": "{\"account_id\":\"ACC-1001\",\"symbol\":\"SIM-AAPL\",\"side\":\"BUY\",\"qty\":10,\"limit_price\":150.25}",
+      "expected_body_sha256": "10576ee7a1340a489554f8d4eb1da712b4ddf796154e5c863e6c4de9372f81b1",
+      "expected_canonical_string": "v1\nPOST\n/v1/orders\n\n2026-01-15T12:00:00Z\nnonce-ref-0002\nhmac-ref-key-2\n10576ee7a1340a489554f8d4eb1da712b4ddf796154e5c863e6c4de9372f81b1",
+      "expected_signature_b64url": "Fqa8GtoRwk4bPzgYXpvXOons9xlMfj8Go2t5REKsM2I"
+    }
+  ],
+  "decision_reference_cases": [
+    {
+      "id": "ref-valid-balance",
+      "description": "Valid mTLS + OIDC token + HMAC-SHA256 signature for GET balance",
+      "client_id": "cli-ledger-reader",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "raw_query": "currency=USD",
+      "scopes": ["accounts:read"],
+      "expected_decision": "ALLOW",
+      "expected_reason": "OK_ALLOWED",
+      "expected_status": 200
+    },
+    {
+      "id": "ref-valid-order",
+      "description": "Valid mTLS + OIDC token + HMAC-SHA256 signature for POST order",
+      "client_id": "cli-order-router",
+      "method": "POST",
+      "path": "/v1/orders",
+      "raw_query": "",
+      "scopes": ["accounts:read", "orders:write"],
+      "expected_decision": "ALLOW",
+      "expected_reason": "OK_ALLOWED",
+      "expected_status": 200
+    },
+    {
+      "id": "ref-expired-token",
+      "description": "Token expired beyond clock skew window",
+      "client_id": "cli-ledger-reader",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "token_mutation": "expired",
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_TOKEN_EXPIRED",
+      "expected_status": 401
+    },
+    {
+      "id": "ref-forged-token",
+      "description": "Token signed by untrusted key / tampered payload",
+      "client_id": "cli-ledger-reader",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "token_mutation": "forged_signature",
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_TOKEN_SIG_INVALID",
+      "expected_status": 401
+    },
+    {
+      "id": "ref-wrong-audience",
+      "description": "Valid signature but wrong OIDC audience claim",
+      "client_id": "cli-ledger-reader",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "token_mutation": "wrong_audience",
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_TOKEN_AUDIENCE_MISMATCH",
+      "expected_status": 401
+    },
+    {
+      "id": "ref-wrong-issuer",
+      "description": "Valid signature but wrong OIDC issuer claim",
+      "client_id": "cli-ledger-reader",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "token_mutation": "wrong_issuer",
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_TOKEN_ISSUER_MISMATCH",
+      "expected_status": 401
+    },
+    {
+      "id": "ref-alg-none",
+      "description": "JWT alg=none downgrade attack",
+      "client_id": "cli-ledger-reader",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "token_mutation": "alg_none",
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_TOKEN_ALG_REJECTED",
+      "expected_status": 401
+    },
+    {
+      "id": "ref-scope-escalation",
+      "description": "Ledger reader attempting order creation without orders:write or order-router role",
+      "client_id": "cli-ledger-reader",
+      "method": "POST",
+      "path": "/v1/orders",
+      "scopes": ["accounts:read"],
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_ROLE_FORBIDDEN",
+      "expected_status": 403
+    },
+    {
+      "id": "ref-unmatched-route-default-deny",
+      "description": "Unknown endpoint denied by default",
+      "client_id": "cli-order-router",
+      "method": "DELETE",
+      "path": "/v1/admin/wipe",
+      "scopes": ["accounts:read", "orders:write"],
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_POLICY_DEFAULT_DENY",
+      "expected_status": 403
+    },
+    {
+      "id": "ref-revoked-client",
+      "description": "Revoked client registry status denied",
+      "client_id": "cli-revoked-bot",
+      "method": "GET",
+      "path": "/v1/accounts/ACC-1001/balance",
+      "scopes": ["accounts:read"],
+      "expected_decision": "DENY",
+      "expected_reason": "ERR_CLIENT_REVOKED",
+      "expected_status": 403
+    }
+  ]
+}

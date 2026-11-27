@@ -1,0 +1,21 @@
+title: Trading Risk Limit Override or Kill-Switch Tampering
+id: TISM-SIGMA-004
+status: stable
+level: critical
+description: Detects unauthorized order risk-limit overrides, kill-switch disables, or notional cap modifications in order audit logs.
+logsource:
+  category: order_audit
+  product: trading-infrastructure
+detection:
+  selection_tamper:
+    event_type: order_audit
+    action|in:
+      - risk_limit_override
+      - kill_switch_disable
+      - notional_cap_bypass
+  filter_approved:
+    attributes.change_ticket_valid: "true"
+  condition: selection_tamper and not filter_approved
+tags:
+  - attack.impact
+  - trading.risk_controls

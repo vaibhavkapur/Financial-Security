@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "provenance": "synthetic_offline_fixture",
+  "canaries": [
+    {
+      "canary_id": "CANARY-001",
+      "label": "mock_treasury_api_key",
+      "value": "SYNTHETIC_CANARY_API_KEY_9F4A2C81",
+      "classification": "SECRET_CREDENTIAL",
+      "description": "Synthetic canary simulating an internal treasury API credential."
+    },
+    {
+      "canary_id": "CANARY-002",
+      "label": "mock_swift_signing_token",
+      "value": "SYNTHETIC_CANARY_SWIFT_TOKEN_7B8E1D44",
+      "classification": "PAYMENT_SIGNING_SECRET",
+      "description": "Synthetic canary simulating a payment rail signing token."
+    },
+    {
+      "canary_id": "CANARY-003",
+      "label": "mock_custody_recovery_phrase",
+      "value": "SYNTHETIC_CANARY_CUSTODY_SEED_3D6F9A02",
+      "classification": "CUSTODY_KEY_MATERIAL",
+      "description": "Synthetic canary simulating custody recovery material."
+    },
+    {
+      "canary_id": "CANARY-004",
+      "label": "mock_client_tax_identifier",
+      "value": "SYNTHETIC_CANARY_TAX_ID_000_00_0000",
+      "classification": "SENSITIVE_PII",
+      "description": "Synthetic canary simulating sensitive client tax identifier."
+    }
+  ]
+}

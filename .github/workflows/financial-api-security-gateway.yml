@@ -1,0 +1,33 @@
+name: Financial API Security Gateway CI
+
+on:
+  push:
+    paths:
+      - 'projects/financial-api-security-gateway/**'
+      - '.github/workflows/financial-api-security-gateway.yml'
+  pull_request:
+    paths:
+      - 'projects/financial-api-security-gateway/**'
+      - '.github/workflows/financial-api-security-gateway.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/financial-api-security-gateway
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: projects/financial-api-security-gateway/go.mod
+
+      - name: Run full validation suite
+        run: ./scripts/validate.sh
+
+      - name: Run pure evaluator microbenchmark smoke test
+        run: go test -bench=BenchmarkEvaluatorFullPipeline -benchmem -benchtime=100ms ./tests

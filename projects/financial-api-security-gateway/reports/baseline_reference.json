@@ -1,0 +1,36 @@
+{
+  "fixed_clock": "2026-01-15T12:00:00Z",
+  "fixture_id": "ref-vectors-v1",
+  "metadata": {
+    "schema_version": "1.0.0",
+    "generated_at_utc": "2026-11-27T15:07:55Z",
+    "go_version": "go1.27.1",
+    "goos": "darwin",
+    "goarch": "arm64",
+    "num_cpu": 10,
+    "config_version": "1.0.0",
+    "policy_version": "2026.11.v1",
+    "seed": 42
+  },
+  "oracle_checks": [
+    {
+      "body_sha_match": true,
+      "canonical_match": true,
+      "exact_tolerance": 0,
+      "id": "sig-vec-get-balance",
+      "passed": true,
+      "signature_match": true
+    },
+    {
+      "body_sha_match": true,
+      "canonical_match": true,
+      "exact_tolerance": 0,
+      "id": "sig-vec-post-order",
+      "passed": true,
+      "signature_match": true
+    }
+  ],
+  "oracle_source": "Independent Python 3 stdlib hashlib.sha256 + hmac.new (HMAC-SHA256) calculation",
+  "passed": 2,
+  "total": 2
+}

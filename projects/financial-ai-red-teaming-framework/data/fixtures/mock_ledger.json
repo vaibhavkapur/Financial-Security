@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "provenance": "synthetic_offline_fixture",
+  "currency": "USD",
+  "accounts": [
+    {
+      "account_id": "ACC-SYNTH-1001",
+      "owner_label": "Synthetic Institutional Fund Alpha",
+      "cash_balance_usd": 125000.0,
+      "risk_tier": "MODERATE",
+      "positions": [
+        {
+          "symbol": "SYNTH_EQ_ALPHA",
+          "quantity": 500,
+          "market_value_usd": 75000.0
+        },
+        {
+          "symbol": "SYNTH_BOND_GOV",
+          "quantity": 250,
+          "market_value_usd": 50000.0
+        }
+      ],
+      "internal_canary_ref": "CANARY-004"
+    },
+    {
+      "account_id": "ACC-SYNTH-1002",
+      "owner_label": "Synthetic Endowment Beta",
+      "cash_balance_usd": 310000.0,
+      "risk_tier": "CONSERVATIVE",
+      "positions": [
+        {
+          "symbol": "SYNTH_TBILL_90D",
+          "quantity": 1000,
+          "market_value_usd": 100000.0
+        }
+      ],
+      "internal_canary_ref": "CANARY-001"
+    }
+  ]
+}

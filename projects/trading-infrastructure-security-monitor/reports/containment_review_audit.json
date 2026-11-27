@@ -1,0 +1,344 @@
+{
+  "metadata": {
+    "run_id": "RUN-7b5c1c5dd1d9",
+    "schema_version": "1.0.0",
+    "environment": "synthetic-trading-lab",
+    "deterministic_seed": 2026065,
+    "containment_mode": "simulation_only",
+    "live_containment": false,
+    "go_version": "go1.27.1",
+    "os": "darwin",
+    "arch": "arm64",
+    "input_path": "data/fixtures/scenarios/suppression_and_reviewer_audit.jsonl",
+    "input_sha256": "e29884e2c0876bd96719ff6e7980c4488e1b4b821418f7cda76f83b0cf4c11f4"
+  },
+  "metrics": {
+    "events_ingested": 6,
+    "events_normalized": 6,
+    "events_deduplicated": 0,
+    "events_invalid": 0,
+    "fields_redacted": 0,
+    "telemetry_gaps_detected": 1,
+    "alerts_total": 4,
+    "alerts_active": 3,
+    "alerts_suppressed": 1,
+    "cases_created": 2,
+    "proposals_created": 1
+  },
+  "telemetry_gaps": [
+    {
+      "source": "auth_log",
+      "reason": "inter_event_silence_exceeded",
+      "gap_start": "2026-06-02T02:15:00Z",
+      "gap_end": "2026-06-06T02:15:00Z",
+      "gap_duration_seconds": 345600
+    }
+  ],
+  "validation_errors": [],
+  "alerts": [
+    {
+      "alert_id": "ALT-2a49e41afca3",
+      "rule_id": "TISM-SIGMA-003",
+      "rule_title": "Abnormal Authentication Access to Trading Infrastructure",
+      "category": "auth_log",
+      "severity": "high",
+      "occurred_at": "2026-06-02T02:15:00Z",
+      "actor": "ops-oncall-dana",
+      "service": "order-router",
+      "host": "trd-ord-01",
+      "summary": "Abnormal Authentication Access to Trading Infrastructure by actor ops-oncall-dana on order-router (deny: missing change_ticket)",
+      "source_event_ids": [
+        "sup-001"
+      ],
+      "suppressed": true,
+      "suppression_id": "SUP-2026-001",
+      "suppression_reason": "Approved synthetic DR failover drill during off-hours maintenance",
+      "evidence": {
+        "action": "login",
+        "event_type": "auth_log",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-dr-01",
+        "source_ip": "10.10.1.99",
+        "suppression_approved_by": "sec-reviewer-alice",
+        "suppression_ticket": "INC-2026-4401"
+      },
+      "tags": [
+        "attack.initial_access",
+        "trading.access_control"
+      ]
+    },
+    {
+      "alert_id": "ALT-607c1191859c",
+      "rule_id": "TISM-HEALTH-001",
+      "rule_title": "Telemetry Stream Silence Gap Detected",
+      "category": "telemetry_health",
+      "severity": "medium",
+      "occurred_at": "2026-06-06T02:15:00Z",
+      "actor": "telemetry-monitor",
+      "service": "auth_log",
+      "host": "telemetry-pipeline",
+      "summary": "Telemetry source auth_log had a 345600s silence gap exceeding 300s threshold",
+      "source_event_ids": [
+        "sup-001",
+        "sup-005"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "gap_duration_seconds": "345600",
+        "gap_reason": "inter_event_silence_exceeded",
+        "missing_source": "auth_log",
+        "threshold_seconds": "300"
+      },
+      "tags": [
+        "telemetry.coverage",
+        "resilience.gap"
+      ]
+    },
+    {
+      "alert_id": "ALT-cceef50fbe99",
+      "rule_id": "TISM-SIGMA-003",
+      "rule_title": "Abnormal Authentication Access to Trading Infrastructure",
+      "category": "auth_log",
+      "severity": "high",
+      "occurred_at": "2026-06-06T02:15:00Z",
+      "actor": "ops-oncall-dana",
+      "service": "order-router",
+      "host": "trd-ord-01",
+      "summary": "Abnormal Authentication Access to Trading Infrastructure by actor ops-oncall-dana on order-router (deny: missing change_ticket)",
+      "source_event_ids": [
+        "sup-005"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "login",
+        "event_type": "auth_log",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-dr-expired",
+        "source_ip": "10.10.1.99"
+      },
+      "tags": [
+        "attack.initial_access",
+        "trading.access_control"
+      ]
+    },
+    {
+      "alert_id": "ALT-52c1f19d6d66",
+      "rule_id": "TISM-SIGMA-002",
+      "rule_title": "Unexpected Privilege Escalation or Role Grant",
+      "category": "auth_log",
+      "severity": "critical",
+      "occurred_at": "2026-06-06T02:16:00Z",
+      "actor": "ops-oncall-dana",
+      "service": "order-router",
+      "host": "trd-ord-01",
+      "summary": "Unexpected Privilege Escalation or Role Grant by actor ops-oncall-dana on order-router (deny: missing change_ticket)",
+      "source_event_ids": [
+        "sup-006"
+      ],
+      "suppressed": false,
+      "evidence": {
+        "action": "role_grant",
+        "event_type": "auth_log",
+        "outcome": "success",
+        "policy_decision_reason": "deny: missing change_ticket",
+        "session_id": "sess-dr-expired",
+        "source_ip": "10.10.1.99",
+        "target_role": "trading-admin"
+      },
+      "tags": [
+        "attack.privilege_escalation",
+        "trading.iam"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "CASE-80f737f46208",
+      "title": "[MEDIUM] 1 correlated alert(s) involving telemetry-monitor on auth_log",
+      "severity": "medium",
+      "status": "open",
+      "first_seen": "2026-06-06T02:15:00Z",
+      "last_seen": "2026-06-06T02:15:00Z",
+      "primary_actor": "telemetry-monitor",
+      "affected_services": [
+        "auth_log"
+      ],
+      "affected_hosts": [
+        "telemetry-pipeline"
+      ],
+      "alert_ids": [
+        "ALT-607c1191859c"
+      ],
+      "source_event_ids": [
+        "sup-001",
+        "sup-005"
+      ],
+      "correlation_reasons": [
+        "single_alert_case"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-06T02:15:00Z",
+          "alert_id": "ALT-607c1191859c",
+          "rule_id": "TISM-HEALTH-001",
+          "severity": "medium",
+          "summary": "Telemetry source auth_log had a 345600s silence gap exceeding 300s threshold",
+          "source_event_ids": [
+            "sup-001",
+            "sup-005"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_inspect_telemetry_collector"
+      ]
+    },
+    {
+      "case_id": "CASE-e6085cfb4383",
+      "title": "[CRITICAL] 2 correlated alert(s) involving ops-oncall-dana on order-router",
+      "severity": "critical",
+      "status": "open",
+      "first_seen": "2026-06-06T02:15:00Z",
+      "last_seen": "2026-06-06T02:16:00Z",
+      "primary_actor": "ops-oncall-dana",
+      "affected_services": [
+        "order-router"
+      ],
+      "affected_hosts": [
+        "trd-ord-01"
+      ],
+      "alert_ids": [
+        "ALT-52c1f19d6d66",
+        "ALT-cceef50fbe99"
+      ],
+      "source_event_ids": [
+        "sup-005",
+        "sup-006"
+      ],
+      "correlation_reasons": [
+        "shared_actor:ops-oncall-dana"
+      ],
+      "timeline": [
+        {
+          "timestamp": "2026-06-06T02:15:00Z",
+          "alert_id": "ALT-cceef50fbe99",
+          "rule_id": "TISM-SIGMA-003",
+          "severity": "high",
+          "summary": "Abnormal Authentication Access to Trading Infrastructure by actor ops-oncall-dana on order-router (deny: missing change_ticket)",
+          "source_event_ids": [
+            "sup-005"
+          ]
+        },
+        {
+          "timestamp": "2026-06-06T02:16:00Z",
+          "alert_id": "ALT-52c1f19d6d66",
+          "rule_id": "TISM-SIGMA-002",
+          "severity": "critical",
+          "summary": "Unexpected Privilege Escalation or Role Grant by actor ops-oncall-dana on order-router (deny: missing change_ticket)",
+          "source_event_ids": [
+            "sup-006"
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "simulate_revoke_session"
+      ]
+    }
+  ],
+  "containment_proposals": [
+    {
+      "proposal_id": "PROP-d99590e7ea7f",
+      "case_id": "CASE-e6085cfb4383",
+      "action_type": "simulate_revoke_session",
+      "target": "actor:ops-oncall-dana",
+      "execution_mode": "simulation_only",
+      "live_executed": false,
+      "severity": "critical",
+      "requested_by": "tism-correlator",
+      "required_approvals": 2,
+      "status": "simulated",
+      "approvals": [
+        {
+          "reviewer": "sec-reviewer-alice",
+          "decision": "approve",
+          "rationale": "Reviewed correlated evidence and blast radius",
+          "timestamp": "2026-06-01T12:05:00Z"
+        },
+        {
+          "reviewer": "sec-reviewer-bob",
+          "decision": "approve",
+          "rationale": "Dual-control approval for critical severity dry-run simulation",
+          "timestamp": "2026-06-01T12:06:00Z"
+        }
+      ],
+      "blast_radius": [
+        "simulation_only: zero live trading impact",
+        "simulated_service_scope:order-router",
+        "simulated_host_scope:trd-ord-01",
+        "action:simulate_revoke_session"
+      ],
+      "rollback_plan": "Simulation rollback: restore synthetic session state for actor:ops-oncall-dana via IAM fixture snapshot",
+      "simulated_diff": {
+        "action": "simulate_revoke_session",
+        "after_state": "contained_synthetic_state_dry_run",
+        "before_state": "active_synthetic_state",
+        "live_side_effect": "none",
+        "mode": "simulation_only",
+        "target": "actor:ops-oncall-dana"
+      },
+      "created_at": "2026-06-01T12:00:00.006Z"
+    }
+  ],
+  "reviewer_audit_log": [
+    {
+      "sequence_num": 1,
+      "record_id": "AUD-d14cf1e3095b",
+      "timestamp": "2026-06-02T02:15:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "alert_suppression_applied",
+      "target_id": "SUP-2026-001:ALT-2a49e41afca3",
+      "decision": "suppressed",
+      "rationale": "Approved synthetic DR failover drill during off-hours maintenance",
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "record_hash": "b828395c8e2a0c6a7a9a0293a416c802ba798c43f01c0019497411d70a9428b5"
+    },
+    {
+      "sequence_num": 2,
+      "record_id": "AUD-6ddfd907f116",
+      "timestamp": "2026-06-01T12:05:00Z",
+      "reviewer": "sec-reviewer-alice",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-d99590e7ea7f",
+      "decision": "approve",
+      "rationale": "Reviewed correlated evidence and blast radius",
+      "prev_hash": "b828395c8e2a0c6a7a9a0293a416c802ba798c43f01c0019497411d70a9428b5",
+      "record_hash": "a8731a9ac0f1d30cf836fd8821976f4ea95ecf323973652f6b3ebac79bf140a0"
+    },
+    {
+      "sequence_num": 3,
+      "record_id": "AUD-be9bb3b45e4e",
+      "timestamp": "2026-06-01T12:06:00Z",
+      "reviewer": "sec-reviewer-bob",
+      "action": "review_containment_proposal",
+      "target_id": "PROP-d99590e7ea7f",
+      "decision": "approve",
+      "rationale": "Dual-control approval for critical severity dry-run simulation",
+      "prev_hash": "a8731a9ac0f1d30cf836fd8821976f4ea95ecf323973652f6b3ebac79bf140a0",
+      "record_hash": "783f76c02585f84114933ebbf01a1f6169370a67cccd2c30e450a505b3f890d1"
+    },
+    {
+      "sequence_num": 4,
+      "record_id": "AUD-1df0a33be862",
+      "timestamp": "2026-06-01T12:07:00Z",
+      "reviewer": "soc-lead-carol",
+      "action": "execute_containment_simulation",
+      "target_id": "PROP-d99590e7ea7f",
+      "decision": "simulated_dry_run",
+      "rationale": "Executed offline simulation only; zero live trading mutations",
+      "prev_hash": "783f76c02585f84114933ebbf01a1f6169370a67cccd2c30e450a505b3f890d1",
+      "record_hash": "42497f0eb0b462ed996b0f3887b1c84a783744165b92c8baf1ac5f784a36f131"
+    }
+  ]
+}

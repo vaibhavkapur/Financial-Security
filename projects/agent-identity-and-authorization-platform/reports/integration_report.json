@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "policy_version": "aiap-policy-v1.0.0",
+  "runtime_env": {
+    "go_version": "go1.27.1",
+    "goarch": "arm64",
+    "goos": "darwin"
+  },
+  "scenarios": [
+    {
+      "passed": true,
+      "post_revocation_allows": 0,
+      "scenario": "revocation_race_linearizable",
+      "workers": 30
+    },
+    {
+      "allows": 1,
+      "denied_already_used": 19,
+      "passed": true,
+      "scenario": "duplicate_approval_race",
+      "workers": 20
+    },
+    {
+      "chain_valid": true,
+      "passed": true,
+      "replay_events": 4,
+      "scenario": "restart_persistence_and_replay"
+    }
+  ],
+  "schema_version": "1.0.0"
+}
